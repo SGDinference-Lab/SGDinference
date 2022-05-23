@@ -1,0 +1,74 @@
+[
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/rcpparma_hello_world.cpp",
+        "file_last_write": 1653320672.0,
+        "definitions": [
+            {
+                "usr": "c:@F@rcpparma_hello_world#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "rcpparma_hello_world",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/rcpparma_hello_world.cpp",
+                "line": 18,
+                "column": 11
+            },
+            {
+                "usr": "c:@F@rcpparma_outerproduct#&1$@N@arma@S@Col>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "rcpparma_outerproduct(const arma::colvec &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/rcpparma_hello_world.cpp",
+                "line": 30,
+                "column": 11
+            },
+            {
+                "usr": "c:@F@rcpparma_innerproduct#&1$@N@arma@S@Col>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "rcpparma_innerproduct(const arma::colvec &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/rcpparma_hello_world.cpp",
+                "line": 38,
+                "column": 8
+            },
+            {
+                "usr": "c:@F@rcpparma_bothproducts#&1$@N@arma@S@Col>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "rcpparma_bothproducts(const arma::colvec &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/rcpparma_hello_world.cpp",
+                "line": 47,
+                "column": 12
+            }
+        ]
+    },
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_lm.cpp",
+        "file_last_write": 1652929370.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sgdi_lm_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgdi_lm_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const std::string)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_lm.cpp",
+                "line": 6,
+                "column": 6
+            }
+        ]
+    },
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_qr.cpp",
+        "file_last_write": 1653237541.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sgdi_qr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S5_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgdi_qr_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const std::string, const double &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_qr.cpp",
+                "line": 6,
+                "column": 6
+            }
+        ]
+    }
+]
