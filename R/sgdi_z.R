@@ -32,11 +32,12 @@
 #' sgdi.out = sgdi(x,y)
 
 
-sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
+sgdi_z = function(x, y, z, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, 
                 studentize = TRUE, intercept = TRUE
                 ){
   x = as.matrix(x)
+  z = as.matrix(z)
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
@@ -45,11 +46,13 @@ sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
 
     # Studentize each column if x
     x = apply(x, 2, function(.) (.-mean(.))/sd(.) )
+    z = apply(z, 2, function(.) (.-mean(.))/sd(.) )
   }
 
   # Attach a vector of 1's for an intercept term
   if (intercept){
     x = cbind(1, x)
+    z = cbind(1, z)
   }
 
   # Get the dimension of x and the sample size: p and n
@@ -75,7 +78,7 @@ sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, "rs")
+  out = sgdi_z_cpp(x, y, z, burn, gamma_0, alpha, bt_start, "rs")
   beta_hat = out$beta_hat
   V_hat = out$V_hat
 
