@@ -41,10 +41,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sgdi_z_cpp
+List sgdi_z_cpp(const arma::mat& x, const arma::colvec& y, const arma::mat& z, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference);
+RcppExport SEXP _SGDinference_sgdi_z_cpp(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type z(zSEXP);
+    Rcpp::traits::input_parameter< const int& >::type burn(burnSEXP);
+    Rcpp::traits::input_parameter< const double& >::type gamma_0(gamma_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type inference(inferenceSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgdi_z_cpp(x, y, z, burn, gamma_0, alpha, bt_start, inference));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 7},
     {"_SGDinference_sgdi_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_qr_cpp, 8},
+    {"_SGDinference_sgdi_z_cpp", (DL_FUNC) &_SGDinference_sgdi_z_cpp, 8},
     {NULL, NULL, 0}
 };
 

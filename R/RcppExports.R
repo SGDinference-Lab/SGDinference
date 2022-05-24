@@ -9,3 +9,7 @@ sgdi_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau) {
     .Call(`_SGDinference_sgdi_qr_cpp`, x, y, burn, gamma_0, alpha, bt_start, inference, tau)
 }
 
+sgdi_z_cpp <- function(x, y, z, burn, gamma_0, alpha, bt_start, inference) {
+    .Call(`_SGDinference_sgdi_z_cpp`, x, y, z, burn, gamma_0, alpha, bt_start, inference)
+}
+
