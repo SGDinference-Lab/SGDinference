@@ -5,6 +5,14 @@ sgd_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau) {
     .Call(`_SGDinference_sgd_qr_cpp`, x, y, burn, gamma_0, alpha, bt_start, tau)
 }
 
+updateGauss <- function(Z, res, der, grad, tau, h1) {
+    invisible(.Call(`_SGDinference_updateGauss`, Z, res, der, grad, tau, h1))
+}
+
+sgd_sqr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau, h = 0.05) {
+    .Call(`_SGDinference_sgd_sqr_cpp`, x, y, burn, gamma_0, alpha, bt_start, tau, h)
+}
+
 sgdi_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference) {
     .Call(`_SGDinference_sgdi_lm_cpp`, x, y, burn, gamma_0, alpha, bt_start, inference)
 }
