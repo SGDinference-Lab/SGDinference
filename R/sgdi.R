@@ -12,10 +12,10 @@
 #' @param z numeric. (n x q) matrix of instruments used for \code{"tsls"} (Two-Stage Least Squares)
 #' @param inference character specifying the inference method. Default is "rs" (random scaling)
 #' @param path_output numeric specifying the sequence that print out the output paths
-#' @param bar_Pi_s temporary. Will delete this later. (Population Pi_star)
 #' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param qt numeric. Quantile. Default is 0.5. 
 #'
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -33,7 +33,7 @@
 
 
 sgdi = function(x, y, z=NA, gamma_0=1, alpha=0.667, burn=1, model="lm", inference="rs",
-                     bt_start = NULL, path_output = NULL, Pi_s=NULL, qt=0.5,
+                     bt_start = NULL, path_output = NULL, qt=0.5,
                      studentize = TRUE, intercept = TRUE
 ){
   #----------------------------------------------

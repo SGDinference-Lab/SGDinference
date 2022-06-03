@@ -1,22 +1,19 @@
-#' Averaged SGD and its Inference via Random Scaling
+#' Inference of quantile regression with SGD and random scaling
 #'
-#' Compute the averaged SGD estimator and the confidence intervals via random scaling method.
+#' Compute the averaged SGD estimator of quantile regression and the confidence intervals via random scaling method.
 #'
 #' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
 #' @param y numeric
-#' @param gamma_0 numeric
-#' @param alpha numeric
-#' @param burn numeric
-#' @param model character specifying the model to be used: \code{"lm"} (linear
-#'   model)
-#' @param z numeric. (n x q) matrix of instruments used for \code{"tsls"} (Two-Stage Least Squares)
+#' @param gamma_0 numeric. Tuning parameter for the learning rate: gamma_0 * n^(alpha) (default is 1)
+#' @param alpha numeric. Tuning parameter for the learning rate: gamma_0 * n^(alpha) (default is 0.667)
+#' @param burn numeric. Number of burn-in observations (default is 1, no burn-in)
 #' @param inference character specifying the inference method. Default is "rs" (random scaling)
+#' @param bt_start numeric. 
 #' @param path_output numeric specifying the sequence that print out the output paths
-#' @param bar_Pi_s temporary. Will delete this later. (Population Pi_star)
-#' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#'
+#' @param qt numeric. Quantile. Default is 0.5. 
+#' 
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
 #' components:
@@ -29,7 +26,7 @@
 #' bt0 = rep(5,p)
 #' x = matrix(rnorm(n*(p-1)), n, (p-1))
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
-#' sgdi.out = sgdi(x,y)
+#' sgdi.out = sgdi_qr(x,y)
 
 
 sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",

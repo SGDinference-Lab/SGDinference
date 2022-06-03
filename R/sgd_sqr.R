@@ -7,15 +7,12 @@
 #' @param gamma_0 numeric
 #' @param alpha numeric
 #' @param burn numeric
-#' @param model character specifying the model to be used: \code{"lm"} (linear
-#'   model)
-#' @param z numeric. (n x q) matrix of instruments used for \code{"tsls"} (Two-Stage Least Squares)
-#' @param inference character specifying the inference method. Default is "rs" (random scaling)
 #' @param path_output numeric specifying the sequence that print out the output paths
-#' @param bar_Pi_s temporary. Will delete this later. (Population Pi_star)
 #' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param qt numeric. Quantile. Default is 0.5. 
+#' @param h numeric. Bandwidth for smoothed QR estimator. Default is 0 (automatic choice)
 #'
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -23,13 +20,7 @@
 #'
 #' @export
 #'
-#' @examples
-#' n = 1e05
-#' p = 5
-#' bt0 = rep(5,p)
-#' x = matrix(rnorm(n*(p-1)), n, (p-1))
-#' y = cbind(1,x) %*% bt0 + rnorm(n)
-#' sgdi.out = sgdi(x,y)
+
 
 
 sgd_sqr = function(x, y, gamma_0=1, alpha=0.667, burn=1, 

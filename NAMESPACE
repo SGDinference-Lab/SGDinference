@@ -1,3 +1,9 @@
 useDynLib(SGDinference, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
-exportPattern("^[[:alpha:]]+")
+
+export(sgd_qr)
+export(sgd_sqr)
+export(sgdi)
+export(sgdi_lm)
+export(sgdi_qr)
+export(sgdi_z)
