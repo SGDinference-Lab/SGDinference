@@ -36,11 +36,12 @@ sgdi = function(x, y, z=NA, gamma_0=1, alpha=0.667, burn=1, model="lm", inferenc
                      bt_start = NULL, path_output = NULL, qt=0.5,
                      studentize = TRUE, intercept = TRUE
 ){
+  V_hat1 = 0
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
   if (model=="lm"){
-    test = sgdi_lm(x, y, gamma_0, alpha, burn, inference="rs",
+    test = sgdi_lm(x, y, gamma_0, alpha, burn, inference,
                    bt_start, path_output, 
                    studentize, intercept
     )
@@ -59,6 +60,7 @@ sgdi = function(x, y, z=NA, gamma_0=1, alpha=0.667, burn=1, model="lm", inferenc
     )
     beta_hat = out$beta_hat
     V_hat = out$V_hat
+    V_hat1 = out$V_hat1
   }
   
   if (model=="z"){
@@ -71,7 +73,7 @@ sgdi = function(x, y, z=NA, gamma_0=1, alpha=0.667, burn=1, model="lm", inferenc
   }
   
   if ( is.null(path_output)) {
-    return(list(beta_hat=beta_hat, V_hat = V_hat))
+    return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat1 = V_hat1))
   } else {
     return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }

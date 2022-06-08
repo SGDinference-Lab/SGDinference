@@ -79,6 +79,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sgdi_boot_qr_cpp
+List sgdi_boot_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference, const double& tau, const int& n_boot);
+RcppExport SEXP _SGDinference_sgdi_boot_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP, SEXP tauSEXP, SEXP n_bootSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const int& >::type burn(burnSEXP);
+    Rcpp::traits::input_parameter< const double& >::type gamma_0(gamma_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type inference(inferenceSEXP);
+    Rcpp::traits::input_parameter< const double& >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const int& >::type n_boot(n_bootSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgdi_boot_qr_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, tau, n_boot));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sgdi_lm_cpp
 List sgdi_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference);
 RcppExport SEXP _SGDinference_sgdi_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP) {
@@ -138,6 +157,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 7},
     {"_SGDinference_updateGauss", (DL_FUNC) &_SGDinference_updateGauss, 6},
     {"_SGDinference_sgd_sqr_cpp", (DL_FUNC) &_SGDinference_sgd_sqr_cpp, 8},
+    {"_SGDinference_sgdi_boot_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_boot_qr_cpp, 9},
     {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 7},
     {"_SGDinference_sgdi_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_qr_cpp, 8},
     {"_SGDinference_sgdi_z_cpp", (DL_FUNC) &_SGDinference_sgdi_z_cpp, 8},

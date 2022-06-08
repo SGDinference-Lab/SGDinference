@@ -3,8 +3,8 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha,
-             const arma::colvec& bt_start, const std::string inference, const double& tau){
+List sgdi_boot_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha,
+             const arma::colvec& bt_start, const std::string inference, const double& tau, const int& n_boot){
   int n = y.n_elem;
   double learning_rate_new;
   arma::colvec gradient_bt_new;
@@ -17,10 +17,8 @@ List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
   arma::vec b_t = arma::vec(p);
   double c_t = 0.0;
   arma::mat V_t = arma::mat(p,p);
-  
-  double A_t1 = 0.0;
-  double b_t1 = 0.0;
-  double V_t1 = 0.0;
+  arma::mat coef_boot_mat = arma::mat(p,n_boot);
+  arma::mat bar_coef_boot_mat = arma::mat(p,n_boot);
 
   if (burn > 1) {
     for(int obs = 1; obs < burn; obs++){
@@ -35,7 +33,7 @@ List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
   // for (int obs = burn; obs < (n+1); obs++){
   for (int obs = burn; obs < (n+1); obs++){
     learning_rate_new = gamma_0 * std::pow(obs, -alpha);
-    gradient_bt_new = ( trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * bt_t)) - tau) );
+    gradient_bt_new =  trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * bt_t)) - tau) ;
     bt_t = bt_t - learning_rate_new * gradient_bt_new;
     bar_bt_t = ( bar_bt_t*(obs - burn) + bt_t ) / (obs - burn + 1);
     if ( inference == "rs") {
@@ -44,18 +42,19 @@ List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
       c_t = c_t + std::pow(obs, 2.0);
       V_t = ( A_t - b_t * trans(bar_bt_t) - bar_bt_t * trans(b_t) + c_t * bar_bt_t * trans(bar_bt_t) ) / (std::pow(obs, 2.0));
     }
-    if ( inference == "rs1") {
-      A_t1 = A_t1 + std::pow(obs, 2.0) * bar_bt_t[1] * bar_bt_t[1];
-      b_t1 = b_t1 + std::pow(obs, 2.0) * bar_bt_t[1];
-      c_t = c_t + std::pow(obs, 2.0);
-      V_t1 = ( A_t1 - b_t1 * bar_bt_t[1] - bar_bt_t[1] * b_t1 + c_t * bar_bt_t[1] * bar_bt_t[1] ) / (std::pow(obs, 2.0));
+    if ( inference == "boot") {
+      for (int b = 0; b < n_boot; b++){
+        double rnd_w = rexp(1, 1.0)[0];
+        gradient_bt_new =  trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * coef_boot_mat.col(b) )) - tau ) ;
+        coef_boot_mat.col(b) = coef_boot_mat.col(b) - learning_rate_new * rnd_w * gradient_bt_new;
+        bar_coef_boot_mat.col(b) = ( bar_coef_boot_mat.col(b)*(obs - burn) + coef_boot_mat.col(b) ) / (obs - burn + 1);
+      }
     }
   }
 
 
   return List::create(Named("beta_hat") = bar_bt_t,
-                      Named("V_hat") = V_t,
-                      Named("V_hat1") = V_t1);
+                      Named("bar_coef_boot_mat") = bar_coef_boot_mat);
 }
 
 

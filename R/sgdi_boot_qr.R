@@ -29,9 +29,9 @@
 #' sgdi.out = sgdi_qr(x,y)
 
 
-sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
+sgdi_boot_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="boot",
                 bt_start = NULL, path_output = NULL, qt=0.5,
-                studentize = TRUE, intercept = TRUE
+                studentize = TRUE, intercept = TRUE, n_boot=1000
                 ){
   x = as.matrix(x)
   
@@ -73,10 +73,9 @@ sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
   # Quantile Regression
   #----------------------------------------------
 
-    out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt)
+    out = sgdi_boot_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, "boot", tau=qt, n_boot=n_boot)
     beta_hat = out$beta_hat
-    V_hat = out$V_hat
-    V_hat1 = out$V_hat1
+    bar_coef_boot_mat = out$bar_coef_boot_mat
 
 
 
@@ -93,15 +92,13 @@ sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
     }
     # Re-scale the parameters
     beta_hat = rescale_matrix %*% beta_hat
-    # Re-scale the variance
-    V_hat = rescale_matrix %*% V_hat %*% t(rescale_matrix)
-    V_hat1 = rescale_matrix[2,2]^2 * V_hat1 
+    bar_coef_boot_mat = rescale_matrix %*% bar_coef_boot_mat
   }
 
 
 
   if ( is.null(path_output)) {
-    return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat1 = V_hat1))
+    return(list(beta_hat=beta_hat, bar_coef_boot_mat = bar_coef_boot_mat))
   } else {
     return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }

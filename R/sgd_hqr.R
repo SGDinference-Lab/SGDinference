@@ -67,7 +67,11 @@ sgd_hqr = function(x, y, gamma_0=1, alpha=0.667, burn=1,
 
   # Re-scale parameters to reflect the studentization
   if (studentize){
-    rescale_matrix = diag(1/x_sd)
+    if (length(x_sd)>1){
+      rescale_matrix = diag(1/x_sd)
+    } else {
+      rescale_matrix = 1/x_sd
+    }
     if (intercept){
       # Redefine the rescale_matrix including the intercept term
       rescale_matrix = rbind(c(1,-(x_mean/x_sd)), cbind(0, rescale_matrix))
