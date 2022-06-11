@@ -21,29 +21,40 @@ List sgdi_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
   A_t.zeros(p,p);
   b_t.zeros(p);
   V_t.zeros(p,p);
-
+  
+  double A_t1 = 0.0;
+  double b_t1 = 0.0;
+  double V_t1 = 0.0;
+  
   if (burn > 1) {
-    for(int obs = 1; obs < burn; obs++){
+    for(int obs = 1; obs < (burn+1); obs++){
       learning_rate_new = gamma_0 * std::pow(obs, -alpha);
       gradient_bt_new = trans(x.row(obs-1)) * (x.row(obs-1) * bt_t - y(obs-1));
       bt_t = bt_t - learning_rate_new * gradient_bt_new;
     }
   }
 
-  // for (int obs = burn; obs < (n+1); obs++){
-  for (int obs = burn; obs < (n+1); obs++){
+  for (int obs = (burn+1); obs < (n+1); obs++){
     learning_rate_new = gamma_0 * std::pow(obs, -alpha);
     gradient_bt_new = trans(x.row(obs-1)) * (x.row(obs-1) * bt_t - y(obs-1));
     bt_t = bt_t - learning_rate_new * gradient_bt_new;
-    bar_bt_t = ( bar_bt_t*(obs - burn) + bt_t ) / (obs - burn + 1);
+    bar_bt_t = ( bar_bt_t*(obs - burn - 1) + bt_t ) / (obs - burn);
     if ( inference == "rs") {
-      A_t = A_t + std::pow(obs, 2.0) * bar_bt_t * trans(bar_bt_t);
-      b_t = b_t + std::pow(obs, 2.0) * bar_bt_t;
-      c_t = c_t + std::pow(obs, 2.0);
-      V_t = ( A_t - b_t * trans(bar_bt_t) - bar_bt_t * trans(b_t) + c_t * bar_bt_t * trans(bar_bt_t) ) / (std::pow(obs, 2.0));
+      A_t = A_t + std::pow(obs - burn, 2.0) * bar_bt_t * trans(bar_bt_t);
+      b_t = b_t + std::pow(obs - burn, 2.0) * bar_bt_t;
+      c_t = c_t + std::pow(obs - burn, 2.0);
+      V_t = ( A_t - b_t * trans(bar_bt_t) - bar_bt_t * trans(b_t) + c_t * bar_bt_t * trans(bar_bt_t) ) / (std::pow(obs - burn, 2.0));
+    }
+    if ( inference == "rs1") {
+      A_t1 = A_t1 + std::pow(obs - burn, 2.0) * bar_bt_t[1] * bar_bt_t[1];
+      b_t1 = b_t1 + std::pow(obs - burn, 2.0) * bar_bt_t[1];
+      c_t = c_t + std::pow(obs - burn, 2.0);
+      V_t1 = ( A_t1 - b_t1 * bar_bt_t[1] - bar_bt_t[1] * b_t1 + c_t * bar_bt_t[1] * bar_bt_t[1] ) / (std::pow(obs - burn, 2.0));
     }
   }
+  
 
+  //-------------------------------------------
 
   return List::create(Named("beta_hat") = bar_bt_t,
                       Named("V_hat") = V_t);
