@@ -1,7 +1,76 @@
 [
     {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_hqr.cpp",
+        "file_last_write": 1655056144.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sgd_hqr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#S5_#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgd_hqr_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const double &, double)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_hqr.cpp",
+                "line": 7,
+                "column": 6
+            }
+        ]
+    },
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_qr.cpp",
+        "file_last_write": 1655056151.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sgd_qr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#S5_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgd_qr_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const double &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_qr.cpp",
+                "line": 6,
+                "column": 6
+            }
+        ]
+    },
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_sqr.cpp",
+        "file_last_write": 1655056157.0,
+        "definitions": [
+            {
+                "usr": "c:@F@updateGauss#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&S3_#S4_#1d#1d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "updateGauss(const arma::mat &, const arma::vec &, arma::vec &, arma::vec &, const double, const double)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_sqr.cpp",
+                "line": 7,
+                "column": 6
+            },
+            {
+                "usr": "c:@F@sgd_sqr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#S5_#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgd_sqr_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const double &, double)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgd_sqr.cpp",
+                "line": 14,
+                "column": 6
+            }
+        ]
+    },
+    {
+        "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_boot_qr.cpp",
+        "file_last_write": 1655056168.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sgdi_boot_qr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S5_#S4_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sgdi_boot_qr_cpp(const arma::mat &, const arma::colvec &, const int &, const double &, const double &, const arma::colvec &, const std::string, const double &, const int &)",
+                "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_boot_qr.cpp",
+                "line": 6,
+                "column": 6
+            }
+        ]
+    },
+    {
         "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_lm.cpp",
-        "file_last_write": 1652929370.0,
+        "file_last_write": 1655056207.0,
         "definitions": [
             {
                 "usr": "c:@F@sgdi_lm_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#",
@@ -16,7 +85,7 @@
     },
     {
         "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_qr.cpp",
-        "file_last_write": 1653237541.0,
+        "file_last_write": 1655408047.0,
         "definitions": [
             {
                 "usr": "c:@F@sgdi_qr_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#S5_#",
@@ -31,7 +100,7 @@
     },
     {
         "file": "/home/yshin/Dropbox/Github/SGDinference/src/sgdi_z.cpp",
-        "file_last_write": 1653419975.0,
+        "file_last_write": 1655056183.0,
         "definitions": [
             {
                 "usr": "c:@F@sgdi_z_cpp#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Col>#d#S0_#&1I#&1d#S5_#S2_#1$@N@std@N@__cxx11@S@basic_string>#C#$@N@std@S@char_traits>#C#$@N@std@S@allocator>#C#",

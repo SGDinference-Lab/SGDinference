@@ -26,7 +26,7 @@ List sgd_sqr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
   }
   const double h1 = 1.0 / h;
 
-  if (burn > 1) {
+  if (burn > 0) {
     for(int obs = 1; obs < (burn+1); obs++){
       learning_rate_new = gamma_0 * std::pow(obs, -alpha);
       double res =  y(obs-1) - as_scalar(x.row(obs-1)*bt_t);
@@ -37,7 +37,7 @@ List sgd_sqr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
 
   // for (int obs = burn; obs < (n+1); obs++){
   for (int obs = (burn+1); obs < (n+1); obs++){
-    learning_rate_new = gamma_0 * std::pow(obs, -alpha);
+    learning_rate_new = gamma_0 * std::pow(obs-burn, -alpha);
     double res =  y(obs-1) - as_scalar(x.row(obs-1)*bt_t);
     gradient_bt_new = ( trans(x.row(obs-1)) * ( arma::normcdf(-res * h1) - tau ) );
     bt_t = bt_t - learning_rate_new * gradient_bt_new;
