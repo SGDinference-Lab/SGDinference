@@ -28,6 +28,7 @@
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
 #' sgdi.out = sgdi_qr(x,y)
 
+
 sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, qt=0.5,
                 studentize = TRUE, intercept = TRUE

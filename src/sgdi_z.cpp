@@ -28,7 +28,7 @@ List sgdi_z_cpp(const arma::mat& x, const arma::colvec& y, const arma::mat& z, c
   double b_t1 = 0.0;
   double V_t1 = 0.0;
 
-  if (burn > 0) {
+  if (burn > 1) {
     for(int obs = 1; obs < (burn+1); obs++){
       learning_rate_new = gamma_0 * std::pow(obs, -alpha);
       uvec rnd_sel = randperm(q,p);
@@ -49,7 +49,7 @@ List sgdi_z_cpp(const arma::mat& x, const arma::colvec& y, const arma::mat& z, c
     
   // for (int obs = burn; obs < (n+1); obs++){
   for (int obs = (burn+1); obs < (n+1); obs++){
-    learning_rate_new = gamma_0 * std::pow(obs-burn, -alpha);
+    learning_rate_new = gamma_0 * std::pow(obs, -alpha);
     uvec rnd_sel = randperm(q,p);
     vec z_rnd = trans(z.row(obs-1));
     z_rnd = z_rnd(rnd_sel);

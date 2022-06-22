@@ -1,0 +1,8 @@
+------------------------ 
+Sample Size =  1000000 
+dim of X    =  3 
+# of rep    =  1 
+------------------------ 
+Replications :  1 
+Called from: sgdi_boot_qr_cpp(x, y, burn, gamma_0, alpha, bt_start = bt_t, 
+    "boot", tau = qt, n_boot = n_boot)
