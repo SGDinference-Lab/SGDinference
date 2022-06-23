@@ -1,7 +1,7 @@
 Package: SGDinference
 Type: Package
 Title: Inference with Stochastic Gradient Descent
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Date: 2022-06-17
 Author: SGDinference-Lab
 Maintainer: Youngki Shin <yshin12@gmail.com>

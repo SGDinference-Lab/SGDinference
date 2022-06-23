@@ -13,6 +13,7 @@
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param qt numeric. Quantile. Default is 0.5. 
+#' @param n_boot numeric. The number of boostrap samples. Default is 1000.
 #' 
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -67,7 +68,7 @@ sgdi_boot_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="boot",
   n_path = length(path_output)
   cnt_path = 1
   beta_hat_path = matrix(NA, p, n_path)
-  V_hat_path = array(NA, dim = c(p, p, n_path))
+  #V_hat_path = array(NA, dim = c(p, p, n_path))
 
   #----------------------------------------------
   # Quantile Regression
@@ -100,10 +101,11 @@ sgdi_boot_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="boot",
   if ( is.null(path_output)) {
     return(list(beta_hat=beta_hat, bar_coef_boot_mat = bar_coef_boot_mat))
   } else {
-    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
+    NULL
+    # the path_output code was not written yet.
+    # return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }
 
 }
 
 
-# beta_hat_path and V_hat_path are not completed in this code.

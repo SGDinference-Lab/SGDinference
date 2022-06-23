@@ -63,22 +63,15 @@ sgdi = function(x, y, z=NA, gamma_0=1, alpha=0.667, burn=1, model="lm", inferenc
     V_hat1 = out$V_hat1
   }
   
-  if (model=="z"){
-    out = sgdi_z(x, y, z, gamma_0, alpha, burn, inference,
-                  bt_start, path_output, qt,
-                  studentize, intercept
-    )
-    beta_hat = out$beta_hat
-    V_hat = out$V_hat
-  }
-  
   if ( is.null(path_output)) {
     return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat1 = V_hat1))
   } else {
-    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
+    NULL
+    # The path return was note written yet.
+    # return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }
   
 }
 
 
-# beta_hat_path and V_hat_path are not completed in this code.
+
