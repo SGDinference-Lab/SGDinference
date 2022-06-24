@@ -15,7 +15,8 @@ sgdi_qr(
   path_output = NULL,
   qt = 0.5,
   studentize = TRUE,
-  intercept = TRUE
+  intercept = TRUE,
+  rss_idx = c(1)
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ sgdi_qr(
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+
+\item{rss_idx}{numeric. Index of x for random scaling subset inference. Defualt is c(1)}
 }
 \value{
 #' An object of class \code{"sgdi"}, which is a list containing the following
