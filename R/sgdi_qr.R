@@ -13,6 +13,7 @@
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param qt numeric. Quantile. Default is 0.5. 
+#' @param rss_idx numeric. Index of x for random scaling subset inference. Defualt is c(1)
 #' 
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -31,7 +32,8 @@
 
 sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, qt=0.5,
-                studentize = TRUE, intercept = TRUE
+                studentize = TRUE, intercept = TRUE,
+                rss_idx = c(1)
                 ){
   x = as.matrix(x)
   
@@ -73,10 +75,10 @@ sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
   # Quantile Regression
   #----------------------------------------------
 
-    out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt)
+    out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx)
     beta_hat = out$beta_hat
     V_hat = out$V_hat
-    V_hat1 = out$V_hat1
+    V_hat_sub = out$V_hat_sub
 
 
 
@@ -95,13 +97,13 @@ sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
     beta_hat = rescale_matrix %*% beta_hat
     # Re-scale the variance
     V_hat = rescale_matrix %*% V_hat %*% t(rescale_matrix)
-    V_hat1 = rescale_matrix[2,2]^2 * V_hat1 
+    V_hat_sub = rescale_matrix[rss_idx+1,rss_idx+1] %*% V_hat_sub %*% t(rescale_matrix[rss_idx+1,rss_idx+1])
   }
 
 
 
   if ( is.null(path_output)) {
-    return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat1 = V_hat1))
+    return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat_sub = V_hat_sub))
   } else {
     return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }
