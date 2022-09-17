@@ -2,7 +2,6 @@
 
 export(sgd_qr)
 export(sgdi)
-export(sgdi_boot_qr)
 export(sgdi_lm)
 export(sgdi_lm_cpp)
 export(sgdi_qr)

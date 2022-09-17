@@ -5,22 +5,6 @@ sgd_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau) {
     .Call('_SGDinference_sgd_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, tau)
 }
 
-sgdi_boot_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau, n_boot) {
-    .Call('_SGDinference_sgdi_boot_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, tau, n_boot)
-}
-
-#' Leading NA
-#' 
-#' Explanation
-#' 
-#' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
-#' @param y numeric
-#' @param gamma_0 numeric
-#' @param alpha numeric
-#' @param burn numeric
-#' @param inference character specifying the inference method. Default is "rs" (random scaling)
-#' @param bt_start numeric
-#' @export
 sgdi_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference) {
     .Call('_SGDinference_sgdi_lm_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference)
 }

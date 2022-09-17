@@ -2,18 +2,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
 
-//' Leading NA
-//' 
-//' Explanation
-//' 
-//' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
-//' @param y numeric
-//' @param gamma_0 numeric
-//' @param alpha numeric
-//' @param burn numeric
-//' @param inference character specifying the inference method. Default is "rs" (random scaling)
-//' @param bt_start numeric
-//' @export
 // [[Rcpp::export]]
 List sgdi_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha,
              const arma::colvec& bt_start, const std::string inference){
