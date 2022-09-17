@@ -1,24 +1,34 @@
-#' Averaged SGD and its Inference via Random Scaling
+#' Averaged SsubGD estimator for quantile regression
 #'
-#' Compute the averaged SGD estimator and the confidence intervals via random scaling method.
+#' Compute the averaged SGD estimator for quantile regression. This function computes only the point estimate.
 #'
 #' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
-#' @param y numeric
-#' @param gamma_0 numeric
-#' @param alpha numeric
-#' @param burn numeric
+#' @param y numeric. (n x 1) vector of a dependent variable. 
+#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
+#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
+#' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
+#' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
 #' @param path_output numeric specifying the sequence that print out the output paths
-#' @param bt_start numeric
+#' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#' @param qt numeric. Quantile. Default is 0.5. 
 #'
 #' @return
-#' #' An object of class \code{"sgdi"}, which is a list containing the following
-#' components:
+#' An object of class \code{"sgd_qr"}, which is a list containing the following
+#' \describe{
+#' \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+#' \item{\code{beta_hat_path}}{A (p+1) x P matrix. The path of estimated coeffcieitn values, where P is the length of the path}
+#' }
 #'
 #' @export
-#'
+#' 
+#' @examples
+#' n = 1e05
+#' p = 5
+#' bt0 = rep(5,p)
+#' x = matrix(rnorm(n*(p-1)), n, (p-1))
+#' y = cbind(1,x) %*% bt0 + rnorm(n)
+#' sgd.out = sgd_qr(x,y)
 
 
 

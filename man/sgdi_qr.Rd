@@ -30,7 +30,7 @@ sgdi_qr(
 
 \item{burn}{numeric. Number of burn-in observations (default is 1, no burn-in)}
 
-\item{inference}{character specifying the inference method. Default is "rs" (random scaling)}
+\item{inference}{character specifying the inference method. Default is "rs" (random scaling).}
 
 \item{bt_start}{numeric.}
 
@@ -42,7 +42,7 @@ sgdi_qr(
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
 
-\item{rss_idx}{numeric. Index of x for random scaling subset inference. Defualt is c(1)}
+\item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x.}
 }
 \value{
 #' An object of class \code{"sgdi"}, which is a list containing the following

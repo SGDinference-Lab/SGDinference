@@ -1,13 +1,17 @@
 Package: SGDinference
 Type: Package
-Title: Inference with Stochastic Gradient Descent
-Version: 0.0.0.9002
-Date: 2022-06-17
+Title: Inference with Stochastic sub-Gradient Descent
+Version: 0.0.0.9003
+Date: 2022-09-17
 Author: SGDinference-Lab
-Maintainer: Youngki Shin <yshin12@gmail.com>
-Description: More about what it does (maybe more than one line). This section will be added later.
+Maintainer: Youngki Shin <yshin12@gmail.com>, Sokbae "Simon" Lee <sokbae@gmail.com>
+Description: This package provides R code to apply the S-subGD method. The algorithm is developed for fast and robust inference with large-scale quantile regression.
 License: MIT + file LICENSE
 Imports: Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Encoding: UTF-8
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,7 +1,9 @@
 # SGDinference
-R package for SGD inference
+R package for the S-subGD method
 
-Date: 2022-06-22
+Date: 2022-09-16
+
+
 
 ```r
 ## Installation

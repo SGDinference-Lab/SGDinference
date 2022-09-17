@@ -7,13 +7,13 @@
 #' @param gamma_0 numeric. Tuning parameter for the learning rate: gamma_0 * n^(alpha) (default is 1)
 #' @param alpha numeric. Tuning parameter for the learning rate: gamma_0 * n^(alpha) (default is 0.667)
 #' @param burn numeric. Number of burn-in observations (default is 1, no burn-in)
-#' @param inference character specifying the inference method. Default is "rs" (random scaling)
+#' @param inference character specifying the inference method. Default is "rs" (random scaling). 
 #' @param bt_start numeric. 
 #' @param path_output numeric specifying the sequence that print out the output paths
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param qt numeric. Quantile. Default is 0.5. 
-#' @param rss_idx numeric. Index of x for random scaling subset inference. Defualt is c(1)
+#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
 #' 
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
