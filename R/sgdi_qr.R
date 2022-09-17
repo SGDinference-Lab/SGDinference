@@ -1,6 +1,6 @@
 #' Inference of quantile regression with SGD and random scaling
 #'
-#' Compute the averaged SGD estimator of quantile regression and the confidence intervals via random scaling method.
+#' Compute the averaged SGD estimator of quantile regression and the confidence intervals of quantile regressionvia random scaling method.
 #'
 #' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
 #' @param y numeric
@@ -27,8 +27,10 @@
 #' bt0 = rep(5,p)
 #' x = matrix(rnorm(n*(p-1)), n, (p-1))
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
-#' sgdi.out = sgdi_qr(x,y)
+#' out = sgdi_qr(x,y)
 
+# Todo list
+# (1) path_output code
 
 sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, qt=0.5,
