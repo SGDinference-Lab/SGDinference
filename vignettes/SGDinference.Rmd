@@ -1,9 +1,6 @@
 ---
 title: "SGDinference"
-Author: "SGDinference-Lab"
-date: "`r Sys.Date()`"
-#output: rmarkdown::html_vignette
-output: pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SGDinference}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,4 +17,3 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(SGDinference)
 ```
-
