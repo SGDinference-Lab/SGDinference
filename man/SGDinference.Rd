@@ -5,7 +5,7 @@
 \alias{SGDinference}
 \title{SGDinference}
 \description{
-ADD DESCRIPTION LATER
+The SGDinference package comptues the averaged SGD estimator and the variance-covariance matrix via random scaling method.
 }
 \author{
 SGDinference-Lab
