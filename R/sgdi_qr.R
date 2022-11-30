@@ -31,6 +31,10 @@
 #' x = matrix(rnorm(n*(p-1)), n, (p-1))
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
 #' out = sgdi_qr(x,y)
+#' sgdi.out = sgdi_qr(x,y)
+
+# Todo list
+# (1) path_output
 
 sgdi_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, qt=0.5,

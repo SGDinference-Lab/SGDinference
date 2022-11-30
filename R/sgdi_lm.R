@@ -32,6 +32,9 @@
 #' sgdi.out = sgdi_lm(x,y)
 #' out = sgdi_lm(x,y)
 
+# Todo list
+# (1) "rss" subset inference for linear regression
+# (2) path_output
 
 sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, 
