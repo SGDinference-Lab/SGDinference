@@ -53,7 +53,7 @@ An object of class \code{"sgdi_qr"}, which is a list containing the following
 }
 }
 \description{
-Compute the averaged SGD estimator of quantile regression and the confidence intervals via random scaling method.
+Compute the averaged SGD estimator of quantile regression and the confidence intervals of quantile regressionvia random scaling method.
 }
 \examples{
 n = 1e05
@@ -61,5 +61,6 @@ p = 5
 bt0 = rep(5,p)
 x = matrix(rnorm(n*(p-1)), n, (p-1))
 y = cbind(1,x) \%*\% bt0 + rnorm(n)
+out = sgdi_qr(x,y)
 sgdi.out = sgdi_qr(x,y)
 }

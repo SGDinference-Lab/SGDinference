@@ -42,7 +42,7 @@ sgd_qr(
 An object of class \code{"sgd_qr"}, which is a list containing the following
 \describe{
 \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-\item{\code{beta_hat_path}}{Returned when \code{path_output=TRUE}A (p+1) x P matrix. The path of estimated coeffcieitn values, where P is the length of the path}
+\item{\code{beta_hat_path}}{Returned when \code{path_output=TRUE}A (p+1) x P matrix. The path of estimated coefficient values, where P is the length of the path}
 }
 }
 \description{

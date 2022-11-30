@@ -20,30 +20,36 @@ sgdi_lm(
 \arguments{
 \item{x}{numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)}
 
-\item{y}{numeric}
+\item{y}{numeric. (n x 1) vector of a dependent variable.}
 
-\item{gamma_0}{numeric}
+\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.}
 
-\item{alpha}{numeric}
+\item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.}
 
-\item{burn}{numeric}
+\item{burn}{numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
 
-\item{inference}{character specifying the inference method. Default is "rs" (random scaling)}
+\item{inference}{character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided.}
 
-\item{bt_start}{numeric}
+\item{bt_start}{numeric. (p x 1) vector. User-provided starting value Default is NULL.}
 
 \item{path_output}{numeric specifying the sequence that print out the output paths}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+
+\item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).}
 }
 \value{
-#' An object of class \code{"sgdi"}, which is a list containing the following
-components:
+An object of class \code{"sgdi"}, which is a list containing the following
+\describe{
+\item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+\item{\code{V_hat}}{A (p+1)x (p+1) variance-covariance matrix of \code{beta_hat}}
+\item{\code{V_hat_sub}}{A variance-covariance sub-matrix of \code{beta_hat}. If the subset size is not provided, it returns 0.}
+}
 }
 \description{
-Compute the averaged SGD estimator and the confidence intervals via random scaling method.
+Compute the averaged SGD estimator and the variance-covariance matrix of linear mean regression via random scaling method.
 }
 \examples{
 n = 1e05
@@ -52,4 +58,5 @@ bt0 = rep(5,p)
 x = matrix(rnorm(n*(p-1)), n, (p-1))
 y = cbind(1,x) \%*\% bt0 + rnorm(n)
 sgdi.out = sgdi_lm(x,y)
+out = sgdi_lm(x,y)
 }
