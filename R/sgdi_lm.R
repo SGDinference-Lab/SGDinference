@@ -12,7 +12,6 @@
 #' @param path_output numeric specifying the sequence that print out the output paths
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#@param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
