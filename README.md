@@ -1,12 +1,7 @@
 # SGDinference
 R package for the S-subGD method
 
-<<<<<<< HEAD
-Date: 2022-09-17
-
-=======
-Date: 2022-10-14
->>>>>>> dev
+Date: 2022-11-30
 
 - **sgd_lm** without inference.
 
