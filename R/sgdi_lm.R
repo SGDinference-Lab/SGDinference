@@ -12,6 +12,7 @@
 #' @param path_output numeric specifying the sequence that print out the output paths
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -29,7 +30,6 @@
 #' x = matrix(rnorm(n*(p-1)), n, (p-1))
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
 #' sgdi.out = sgdi_lm(x,y)
-#' out = sgdi_lm(x,y)
 
 # Todo list
 # (1) "rss" subset inference for linear regression
@@ -37,7 +37,8 @@
 
 sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL, path_output = NULL, 
-                studentize = TRUE, intercept = TRUE
+                studentize = TRUE, intercept = TRUE,
+                rss_idx = c(1)
                 ){
   x = as.matrix(x)
   
@@ -78,10 +79,11 @@ sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, "rs")
+  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx)
   beta_hat = out$beta_hat
   V_hat = out$V_hat
-
+  V_hat_sub = out$V_hat_sub
+  
   # Re-scale parameters to reflect the studentization
   if (studentize){
     if (length(x_sd)>1){
@@ -102,7 +104,7 @@ sgdi_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="rs",
 
 
   if ( is.null(path_output)) {
-    return(list(beta_hat=beta_hat, V_hat = V_hat))
+    return(list(beta_hat=beta_hat, V_hat = V_hat, V_hat_sub = V_hat_sub))
   } else {
     return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }

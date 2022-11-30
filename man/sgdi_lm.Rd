@@ -14,7 +14,8 @@ sgdi_lm(
   bt_start = NULL,
   path_output = NULL,
   studentize = TRUE,
-  intercept = TRUE
+  intercept = TRUE,
+  rss_idx = c(1)
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ sgdi_lm(
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+
+\item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following

@@ -33,7 +33,6 @@ List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
     }
   }
 
-  // for (int obs = burn; obs < (n+1); obs++){
   for (int obs = (burn+1); obs < (n+1); obs++){
     learning_rate_new = gamma_0 * std::pow(obs, -alpha);
     gradient_bt_new = ( trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * bt_t)) - tau) );
@@ -53,10 +52,7 @@ List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, con
     }
   }
 
-
   return List::create(Named("beta_hat") = bar_bt_t,
                       Named("V_hat") = V_t,
                       Named("V_hat_sub") = V_ts);
 }
-
-

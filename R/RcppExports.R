@@ -9,8 +9,8 @@ sgd_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau) {
     .Call('_SGDinference_sgd_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, tau)
 }
 
-sgdi_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference) {
-    .Call('_SGDinference_sgdi_lm_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference)
+sgdi_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx) {
+    .Call('_SGDinference_sgdi_lm_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx)
 }
 
 sgdi_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau, rss_idx) {
