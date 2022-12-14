@@ -59,5 +59,4 @@ bt0 = rep(5,p)
 x = matrix(rnorm(n*(p-1)), n, (p-1))
 y = cbind(1,x) \%*\% bt0 + rnorm(n)
 sgdi.out = sgdi_lm(x,y)
-out = sgdi_lm(x,y)
 }
