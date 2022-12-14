@@ -6,7 +6,7 @@
 #' \url{https://economics.mit.edu/people/faculty/david-h-autor/data-archive}.
 #' Specifically, observations are dropped if hourly wages are missing or 
 #' years of education are smaller than 6.    
-#' Then, a 5% random sample is drawn to make the dataset small.
+#' Then, a 5 percent random sample is drawn to make the dataset small.
 #' 
 #' @references Acemoglu, D. and Autor, D., 2011. 
 #' Skills, tasks and technologies: Implications for employment and earnings. 

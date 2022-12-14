@@ -1,4 +1,7 @@
 # SGDinference
+
+[![codecov](https://codecov.io/gh/SGDinference-Lab/SGDinference/branch/master/graph/badge.svg?token=YTBY15IXEP)](https://codecov.io/gh/SGDinference-Lab/SGDinference)
+
 R package for the S-subGD method
 
 Date: 2022-11-30
