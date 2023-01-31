@@ -2,8 +2,8 @@
 #'
 #' Compute the averaged SGD estimator and the confidence intervals via random scaling method.
 #'
-#' @param x numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)
-#' @param y numeric
+#' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
+#' @param data an optional data frame containing variables in the model. 
 #' @param gamma_0 numeric
 #' @param alpha numeric
 #' @param burn numeric
@@ -24,17 +24,28 @@
 #' bt0 = rep(5,p)
 #' x = matrix(rnorm(n*(p-1)), n, (p-1))
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
-#' sgd_lm.out = sgd_lm(x,y)
+#' my.dat = data.frame(y=y, x=x)
+#' sgd.out = sgd_lm(y~., data=my.dat)
+
 
 # Todo list
 # (1) "rss" subset inference for linear regression
 # (2) path_output
 
-sgd_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1, 
+sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
                 bt_start = NULL, path_output = NULL, 
                 studentize = TRUE, intercept = TRUE
                 ){
-  x = as.matrix(x)
+  cl <- match.call()
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data"), names(mf), 0L)
+  mf <- mf[c(1L, m)]
+  mf$drop.unused.levels <- TRUE
+  mf[[1L]] <- quote(stats::model.frame)  # model.frame returns
+  mf <- eval(mf, parent.frame())
+  mt <- attr(mf, "terms")
+  y <- model.response(mf, "numeric")
+  x <- model.matrix(mt, mf)[,-1]
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
@@ -83,11 +94,23 @@ sgd_lm = function(x, y, gamma_0=1, alpha=0.667, burn=1,
   }
 
 
+  #--------------------------------------------
+  # out: list of all outputs
+  #--------------------------------------------
+  result.out = list()
+  class(result.out) = "sgdi"
+  result.out$coefficient = beta_hat
+  result.out$call = cl
+  result.out$terms <- mt
+  result.out$var <- NULL
 
+  result.out$ci.lower = NULL
+  result.out$ci.upper = NULL
+  
   if ( is.null(path_output)) {
-    return(list(beta_hat=beta_hat))
+    return(result.out)
   } else {
-    return(list(beta_hat = beta_hat))
+    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
   }
 
 }

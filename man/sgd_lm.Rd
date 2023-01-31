@@ -5,8 +5,8 @@
 \title{Averaged SGD and its Inference via Random Scaling}
 \usage{
 sgd_lm(
-  x,
-  y,
+  formula,
+  data,
   gamma_0 = 1,
   alpha = 0.667,
   burn = 1,
@@ -17,9 +17,9 @@ sgd_lm(
 )
 }
 \arguments{
-\item{x}{numeric. (n x p) matrix of regressors. Should not include 1 (the intercept)}
+\item{formula}{formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.}
 
-\item{y}{numeric}
+\item{data}{an optional data frame containing variables in the model.}
 
 \item{gamma_0}{numeric}
 
@@ -48,5 +48,6 @@ p = 5
 bt0 = rep(5,p)
 x = matrix(rnorm(n*(p-1)), n, (p-1))
 y = cbind(1,x) \%*\% bt0 + rnorm(n)
-sgd_lm.out = sgd_lm(x,y)
+my.dat = data.frame(y=y, x=x)
+sgd.out = sgd_lm(y~., data=my.dat)
 }

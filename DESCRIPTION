@@ -1,8 +1,8 @@
 Package: SGDinference
 Type: Package
 Title: Inference with Stochastic sub-Gradient Descent
-Version: 0.0.0.9005
-Date: 2022-11-30
+Version: 0.0.0.9006
+Date: 2023-01-30
 Author: SGDinference-Lab
 Maintainer: Youngki Shin <yshin12@gmail.com>, Sokbae "Simon" Lee <sokbae@gmail.com>
 Description: This package provides R code to apply the S-subGD method. The algorithm is developed for fast and robust inference with large-scale quantile regression.
