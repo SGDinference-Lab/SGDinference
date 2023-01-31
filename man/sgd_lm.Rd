@@ -36,7 +36,7 @@ sgd_lm(
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
 }
 \value{
-#' An object of class \code{"sgd_lm"}, which is a list containing the following
+#' An object of class \code{"sgdi"}, which is a list containing the following
 components:
 }
 \description{

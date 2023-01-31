@@ -42,7 +42,13 @@ sgdi_lm(
 \item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).}
 }
 \value{
-
+An object of class \code{"sgdi"}, which is a list containing the following
+\describe{
+\item{\code{coefficient}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+\item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
+\item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
+\item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
+}
 }
 \description{
 Compute the averaged SGD estimator and the variance-covariance matrix of linear mean regression via random scaling method.
