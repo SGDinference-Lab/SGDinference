@@ -16,7 +16,7 @@
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
 #'
 #' @return
-#' An object of class \code{"sgdi_qr"}, which is a list containing the following
+#' An object of class \code{"sgdi"}, which is a list containing the following
 #' \describe{
 #' \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
 #' \item{\code{V_hat}}{A (p+1)x (p+1) variance-covariance matrix of \code{beta_hat}}

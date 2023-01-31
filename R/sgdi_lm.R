@@ -19,8 +19,8 @@
 #' \describe{
 #' \item{\code{coefficient}}{A (p + 1)-vector of estimated parameter values including the intercept.}
 #' \item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
-#' \item{\code{ci.lower}}{The lower part of the 95% confidence interval}
-#' \item{\code{ci.upper}}{The upper part of the 95% confidence interval}
+#' \item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
+#' \item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
 #' }
 #' @export
 #'
