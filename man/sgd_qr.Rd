@@ -11,7 +11,6 @@ sgd_qr(
   alpha = 0.667,
   burn = 1,
   bt_start = NULL,
-  path_output = NULL,
   qt = 0.5,
   studentize = TRUE,
   intercept = TRUE
@@ -30,8 +29,6 @@ sgd_qr(
 
 \item{bt_start}{numeric. (p x 1) vector. User-provided starting value Default is NULL.}
 
-\item{path_output}{numeric specifying the sequence that print out the output paths}
-
 \item{qt}{numeric. Quantile. Default is 0.5.}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
@@ -42,7 +39,6 @@ sgd_qr(
 An object of class \code{"sgd_qr"}, which is a list containing the following
 \describe{
 \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-\item{\code{beta_hat_path}}{Returned when \code{path_output=TRUE}A (p+1) x P matrix. The path of estimated coefficient values, where P is the length of the path}
 }
 }
 \description{

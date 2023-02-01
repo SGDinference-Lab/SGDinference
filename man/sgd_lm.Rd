@@ -11,7 +11,6 @@ sgd_lm(
   alpha = 0.667,
   burn = 1,
   bt_start = NULL,
-  path_output = NULL,
   studentize = TRUE,
   intercept = TRUE
 )
@@ -28,8 +27,6 @@ sgd_lm(
 \item{burn}{numeric}
 
 \item{bt_start}{numeric}
-
-\item{path_output}{numeric specifying the sequence that print out the output paths}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 

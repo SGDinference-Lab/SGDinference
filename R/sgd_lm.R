@@ -7,7 +7,6 @@
 #' @param gamma_0 numeric
 #' @param alpha numeric
 #' @param burn numeric
-#' @param path_output numeric specifying the sequence that print out the output paths
 #' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
@@ -30,10 +29,9 @@
 
 # Todo list
 # (1) "rss" subset inference for linear regression
-# (2) path_output
 
 sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
-                bt_start = NULL, path_output = NULL, 
+                bt_start = NULL,  
                 studentize = TRUE, intercept = TRUE
                 ){
   cl <- match.call()
@@ -94,24 +92,21 @@ sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
   }
 
 
-  #--------------------------------------------
-  # out: list of all outputs
-  #--------------------------------------------
-  result.out = list()
-  class(result.out) = "sgdi"
-  result.out$coefficient = beta_hat
-  result.out$call = cl
-  result.out$terms <- mt
-  result.out$var <- NULL
+#--------------------------------------------
+# out: list of all outputs
+#--------------------------------------------
+result.out = list()
+class(result.out) = "sgdi"
+result.out$coefficient = beta_hat
+result.out$call = cl
+result.out$terms <- mt
+result.out$var <- NULL
 
-  result.out$ci.lower = NULL
-  result.out$ci.upper = NULL
+result.out$ci.lower = NULL
+result.out$ci.upper = NULL
   
-  if ( is.null(path_output)) {
-    return(result.out)
-  } else {
-    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
-  }
+
+return(result.out)
 
 }
 

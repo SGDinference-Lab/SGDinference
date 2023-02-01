@@ -9,7 +9,6 @@
 #' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
 #' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
-#' @param path_output numeric specifying the sequence that print out the output paths
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
@@ -35,10 +34,9 @@
 
 # Todo list
 # (1) "rss" subset inference for linear regression
-# (2) path_output
 
 sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
-                bt_start = NULL, path_output = NULL, 
+                bt_start = NULL,  
                 studentize = TRUE, intercept = TRUE,
                 rss_idx = c(1)
                 ){
@@ -82,10 +80,6 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   c_t = 0
   V_t = NULL
 
-  n_path = length(path_output)
-  cnt_path = 1
-  beta_hat_path = matrix(NA, p, n_path)
-  V_hat_path = array(NA, dim = c(p, p, n_path))
 
   #----------------------------------------------
   # Linear (Mean) Regression 
@@ -112,27 +106,23 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
     V_hat = rescale_matrix %*% V_hat %*% t(rescale_matrix)
   }
 
-  #--------------------------------------------
-  # out: list of all outputs
-  #--------------------------------------------
-  result.out = list()
-  class(result.out) = "sgdi"
-  result.out$coefficient = beta_hat
-  result.out$call = cl
-  result.out$terms <- mt
-  result.out$var <- V_hat
+#--------------------------------------------
+# out: list of all outputs
+#--------------------------------------------
+result.out = list()
+class(result.out) = "sgdi"
+result.out$coefficient = beta_hat
+result.out$call = cl
+result.out$terms <- mt
+result.out$var <- V_hat
   
-  critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
-  ci.lower = beta_hat - critical.value * sqrt(diag(V_hat)/n)
-  ci.upper = beta_hat + critical.value * sqrt(diag(V_hat)/n) 
-  result.out$ci.lower = ci.lower
-  result.out$ci.upper = ci.upper
+critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
+ci.lower = beta_hat - critical.value * sqrt(diag(V_hat)/n)
+ci.upper = beta_hat + critical.value * sqrt(diag(V_hat)/n) 
+result.out$ci.lower = ci.lower
+result.out$ci.upper = ci.upper
   
-  if ( is.null(path_output)) {
-    return(result.out)
-  } else {
-    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
-  }
+return(result.out)
 
 }
 

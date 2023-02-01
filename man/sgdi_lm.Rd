@@ -12,7 +12,6 @@ sgdi_lm(
   burn = 1,
   inference = "rs",
   bt_start = NULL,
-  path_output = NULL,
   studentize = TRUE,
   intercept = TRUE,
   rss_idx = c(1)
@@ -32,8 +31,6 @@ sgdi_lm(
 \item{inference}{character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided.}
 
 \item{bt_start}{numeric. (p x 1) vector. User-provided starting value Default is NULL.}
-
-\item{path_output}{numeric specifying the sequence that print out the output paths}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 

@@ -11,7 +11,6 @@
 #'   mean regression model), \code{"qr"} (quantile regression)
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
 #' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
-#' @param path_output numeric specifying the sequence that print out the output paths
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
@@ -37,7 +36,7 @@
 
 
 sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", inference="rs",
-                     bt_start = NULL, path_output = NULL, qt=0.5,
+                     bt_start = NULL, qt=0.5,
                      studentize = TRUE, intercept = TRUE, rss_idx = c(1)
 ){
   V_hat_sub = 0
@@ -48,7 +47,7 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
   #----------------------------------------------
   if (model=="lm"){
     out = sgdi_lm(formula, data, gamma_0, alpha, burn, inference,
-                   bt_start, path_output, 
+                   bt_start, 
                    studentize, intercept
     )
   }
@@ -59,20 +58,14 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
   #----------------------------------------------
   if (model=="qr"){
     out = sgdi_qr(formula, data, gamma_0, alpha, burn, inference,
-                  bt_start, path_output, qt,
+                  bt_start, qt,
                   studentize, intercept
     )
   }
   
-  out$call = cl
+out$call = cl
+return(out)
   
-  if ( is.null(path_output)) {
-    return(out)
-  } else {
-    NULL
-    # The path return was note written yet.
-    # return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
-  }
   
 }
 

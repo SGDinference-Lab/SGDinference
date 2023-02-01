@@ -8,7 +8,6 @@
 #' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
 #' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
-#' @param path_output numeric specifying the sequence that print out the output paths
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
@@ -17,7 +16,6 @@
 #' An object of class \code{"sgd_qr"}, which is a list containing the following
 #' \describe{
 #' \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-#' \item{\code{beta_hat_path}}{Returned when \code{path_output=TRUE}A (p+1) x P matrix. The path of estimated coefficient values, where P is the length of the path}
 #' }
 #'
 #' @export
@@ -34,7 +32,7 @@
 
 
 sgd_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
-                bt_start = NULL, path_output = NULL, qt=0.5,
+                bt_start = NULL, qt=0.5,
                 studentize = TRUE, intercept = TRUE
                 ){
   cl <- match.call()
@@ -73,10 +71,6 @@ sgd_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
     bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
   }
 
-  n_path = length(path_output)
-  cnt_path = 1
-  beta_hat_path = matrix(NA, p, n_path)
-
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
@@ -101,24 +95,20 @@ sgd_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
 
 
     
-  #--------------------------------------------
-  # out: list of all outputs
-  #--------------------------------------------
-  result.out = list()
-  class(result.out) = "sgdi"
-  result.out$coefficient = beta_hat
-  result.out$call = cl
-  result.out$terms <- mt
-  result.out$var <- NULL
+#--------------------------------------------
+# out: list of all outputs
+#--------------------------------------------
+result.out = list()
+class(result.out) = "sgdi"
+result.out$coefficient = beta_hat
+result.out$call = cl
+result.out$terms <- mt
+result.out$var <- NULL
   
-  result.out$ci.lower = NULL
-  result.out$ci.upper = NULL
+result.out$ci.lower = NULL
+result.out$ci.upper = NULL
   
-  if ( is.null(path_output)) {
-    return(result.out)
-  } else {
-    return(list(beta_hat = beta_hat, V_hat = V_hat, beta_hat_path = beta_hat_path, V_hat_path = V_hat_path))
-  }
+return(result.out)
 
 }
 
