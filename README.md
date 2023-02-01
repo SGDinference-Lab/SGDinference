@@ -4,7 +4,7 @@
 
 R package for the S-subGD method
 
-Date: 2022-11-30
+Date: 2023-01-31
 
 - **sgd_lm** without inference.
 
