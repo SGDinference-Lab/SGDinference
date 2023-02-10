@@ -50,6 +50,7 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
   x <- model.matrix(mt, mf)[,-1]
+  rss_idx_r = rss_idx + 1   # Index starting with 1 in R and with 0 in C
 
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
@@ -86,9 +87,14 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   #----------------------------------------------
   out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx)
   beta_hat = out$beta_hat
-  V_hat = out$V_hat
-  V_hat_sub = out$V_hat_sub
-  
+  if (inference == "rs"){
+    V_out = out$V_hat
+  } else if (inference == "rss"){
+    V_out = out$V_hat_sub
+  } else if (inference == "rsd"){
+    V_out = out$V_hat_diag
+  }
+
   # Re-scale parameters to reflect the studentization
   if (studentize){
     if (length(x_sd)>1){
@@ -103,7 +109,15 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
     # Re-scale the parameters
     beta_hat = rescale_matrix %*% beta_hat
     # Re-scale the variance
-    V_hat = rescale_matrix %*% V_hat %*% t(rescale_matrix)
+    if (inference == "rs"){
+      V_out = rescale_matrix %*% V_out %*% t(rescale_matrix)  
+    } else if (inference == "rss"){
+      V_out = rescale_matrix[rss_idx_r, rss_idx_r] %*% V_out %*% t(rescale_matrix[rss_idx_r, rss_idx_r])  
+    } else if (inference == "rsd"){
+      V_out = diag(rescale_matrix) * V_out * diag(rescale_matrix)
+      # With studentization, we cannot compute the variance of an intercept, which requires the whoel V_hat.
+      V_out[1] = NA 
+    }
   }
 
 #--------------------------------------------
@@ -114,17 +128,27 @@ class(result.out) = "sgdi"
 result.out$coefficient = beta_hat
 result.out$call = cl
 result.out$terms <- mt
-result.out$var <- V_hat
+result.out$var <- V_out
   
 critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
-ci.lower = beta_hat - critical.value * sqrt(diag(V_hat)/n)
-ci.upper = beta_hat + critical.value * sqrt(diag(V_hat)/n) 
+if (inference == "rs"){
+  ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
+  ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
+} else if (inference == "rss"){
+  ci.lower = ci.upper = matrix(NA, p, 1)
+  ci.lower[rss_idx_r] = beta_hat[rss_idx_r] - critical.value * sqrt(diag(V_out)/n)
+  ci.upper[rss_idx_r] = beta_hat[rss_idx_r] + critical.value * sqrt(diag(V_out)/n) 
+} else if (inference == "rsd"){
+  ci.lower = beta_hat - critical.value * sqrt(V_out/n)
+  ci.upper = beta_hat + critical.value * sqrt(V_out/n) 
+}
+
 result.out$ci.lower = ci.lower
 result.out$ci.upper = ci.upper
+
   
 return(result.out)
 
 }
 
 
-# beta_hat_path and V_hat_path are not completed in this code.
