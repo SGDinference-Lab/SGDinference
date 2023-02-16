@@ -12,6 +12,7 @@
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
+#' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -36,7 +37,7 @@
 sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL,  
                 studentize = TRUE, intercept = TRUE,
-                rss_idx = c(1)
+                rss_idx = c(1), level = 0.95
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
@@ -126,8 +127,19 @@ result.out$coefficient = beta_hat
 result.out$call = cl
 result.out$terms <- mt
 result.out$var <- V_out
-  
-critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
+
+if (level == 0.95) {
+  critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
+} else if (level == 0.9) {
+  critical.value = 5.323       # From Abadir and Paruolo (1997) Table 1. 95.0%  
+} else if (level == 0.8) {
+  critical.value = 3.875       # From Abadir and Paruolo (1997) Table 1. 90.0%  
+} else {
+  critical.value = 6.747
+  cat("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
+  cat("We report the default level 0.95. \n")
+}
+
 if (inference == "rs"){
   ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
   ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
