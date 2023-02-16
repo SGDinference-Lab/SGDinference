@@ -32,8 +32,6 @@
 #' my.dat = data.frame(y=y, x=x)
 #' sgdi.out = sgdi_lm(y~., data=my.dat)
 
-# Todo list
-# (1) "rss" subset inference for linear regression
 
 sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL,  
@@ -80,7 +78,6 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   b_t = matrix(0, p, 1)
   c_t = 0
   V_t = NULL
-
 
   #----------------------------------------------
   # Linear (Mean) Regression 
@@ -145,10 +142,7 @@ if (inference == "rs"){
 
 result.out$ci.lower = ci.lower
 result.out$ci.upper = ci.upper
-
   
 return(result.out)
 
 }
-
-
