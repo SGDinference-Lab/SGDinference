@@ -34,10 +34,10 @@
 #' sgdi.out = sgdi_qr(y~., data=my.dat)
 
 sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
-                bt_start = NULL, qt=0.5,
-                studentize = TRUE, intercept = TRUE,
-                rss_idx = c(1)
-                ){
+                   bt_start = NULL, qt=0.5,
+                   studentize = TRUE, intercept = TRUE,
+                   rss_idx = c(1)
+){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -54,20 +54,20 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
     # Compute column means and standard errors and save them for later reconversion
     x_mean = apply(x, 2, mean)
     x_sd = apply(x, 2, sd)
-
+    
     # Studentize each column if x
     x = apply(x, 2, function(.) (.-mean(.))/sd(.) )
   }
-
+  
   # Attach a vector of 1's for an intercept term
   if (intercept){
     x = cbind(1, x)
   }
-
+  
   # Get the dimension of x and the sample size: p and n
   p = ncol(as.matrix(x))
   n = length(y)
-
+  
   # Initialize the bt_t, A_t, b_t, c_t
   if (is.null(bt_start)){
     bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
@@ -78,11 +78,11 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   b_t = matrix(0, p, 1)
   c_t = 0
   V_t = NULL
-
+  
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx)
+  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat
@@ -91,7 +91,7 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   } else if (inference == "rsd"){
     V_out = out$V_hat_diag
   }
-
+  
   # Re-scale parameters to reflect the studentization
   if (studentize){
     if (length(x_sd)>1){
@@ -116,33 +116,33 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
       V_out[1] = NA 
     }
   }
-
-#--------------------------------------------
-# out: list of all outputs
-#--------------------------------------------
-result.out = list()
-class(result.out) = "sgdi"
-result.out$coefficient = beta_hat
-result.out$call = cl
-result.out$terms <- mt
-result.out$var <- V_out
-    
-critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
-if (inference == "rs"){
-  ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
-  ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
-} else if (inference == "rss"){
-  ci.lower = ci.upper = matrix(NA, p, 1)
-  ci.lower[rss_idx_r] = beta_hat[rss_idx_r] - critical.value * sqrt(diag(V_out)/n)
-  ci.upper[rss_idx_r] = beta_hat[rss_idx_r] + critical.value * sqrt(diag(V_out)/n) 
-} else if (inference == "rsd"){
-  ci.lower = beta_hat - critical.value * sqrt(V_out/n)
-  ci.upper = beta_hat + critical.value * sqrt(V_out/n) 
-}
-
-result.out$ci.lower = ci.lower
-result.out$ci.upper = ci.upper
-    
-return(result.out)
-
+  
+  #--------------------------------------------
+  # out: list of all outputs
+  #--------------------------------------------
+  result.out = list()
+  class(result.out) = "sgdi"
+  result.out$coefficient = beta_hat
+  result.out$call = cl
+  result.out$terms <- mt
+  result.out$var <- V_out
+  
+  critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
+  if (inference == "rs"){
+    ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
+    ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
+  } else if (inference == "rss"){
+    ci.lower = ci.upper = matrix(NA, p, 1)
+    ci.lower[rss_idx_r] = beta_hat[rss_idx_r] - critical.value * sqrt(diag(V_out)/n)
+    ci.upper[rss_idx_r] = beta_hat[rss_idx_r] + critical.value * sqrt(diag(V_out)/n) 
+  } else if (inference == "rsd"){
+    ci.lower = beta_hat - critical.value * sqrt(V_out/n)
+    ci.upper = beta_hat + critical.value * sqrt(V_out/n) 
+  }
+  
+  result.out$ci.lower = ci.lower
+  result.out$ci.upper = ci.upper
+  
+  return(result.out)
+  
 }
