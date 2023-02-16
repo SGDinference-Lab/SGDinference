@@ -15,7 +15,8 @@ sgdi_qr(
   qt = 0.5,
   studentize = TRUE,
   intercept = TRUE,
-  rss_idx = c(1)
+  rss_idx = c(1),
+  level = 0.95
 )
 }
 \arguments{
@@ -40,13 +41,16 @@ sgdi_qr(
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
 
 \item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).}
+
+\item{level}{numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following
 \describe{
-\item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-\item{\code{V_hat}}{A (p+1)x (p+1) variance-covariance matrix of \code{beta_hat}}
-\item{\code{V_hat_sub}}{A variance-covariance sub-matrix of \code{beta_hat}. If the subset size is not provided, it returns 0.}
+\item{\code{coefficient}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+\item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
+\item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
+\item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
 }
 }
 \description{
