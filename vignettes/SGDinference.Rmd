@@ -1,8 +1,8 @@
 ---
-title: "SGDinference"
+title: "SGDinference: An R Vignette"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{SGDinference}
+  %\VignetteIndexEntry{SGDinference: An R Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,6 +14,72 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Introduction
+
+__SGDinference__ is an R package that provides estimation and inference methods for large-scale mean and quantile regression models via stochastic (sub-)gradient descent (S-subGD) algorithms. The inference procedure handles cross-sectional data sequentially: 
+
+  (i) updating the parameter estimate with each incoming "new observation", 
+  (ii) aggregating it as a Polyak-Ruppert average, and 
+  (iii) computing an asympotically pivotal statistic for inference through random scaling.
+
+The methodology used in the SGDinference package is described in detail in the following papers:
+
+- Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2022. Fast and robust online inference with stochastic gradient descent via random scaling. In _Proceedings of the AAAI Conference on Artificial Intelligence_ (Vol. 36, No. 7, pp. 7381-7389).
+<https://doi.org/10.1609/aaai.v36i7.20701>.
+
+- Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2023. Fast Inference for Quantile Regression with Tens of Millions of Observations. 	arXiv:2209.14502 [econ.EM] <https://doi.org/10.48550/arXiv.2209.14502>.
+
+We begin by calling the SGDinference package.
+
 ```{r setup}
 library(SGDinference)
 ```
+
+## Case Study: Estimating a Wage Equation
+
+To illustrate the usefulness of the package, we use a small dataset included in the package.
+
+```{r}
+    y = Census2000$ln_hrwage 
+  edu = Census2000$edyrs
+  exp = Census2000$exp
+ exp2 = exp^2/100
+```
+
+
+```{r}
+ out1 = lm(y ~ edu + exp + exp2)
+ print(out1)
+```
+
+```{r}
+ out2 = sgdi_lm(y~ edu + exp + exp2,gamma_0=1)
+ print(out2)
+```
+
+```{r}
+out3 = sgdi_qr(y~ edu + exp + exp2,gamma_0=1)
+print(out3)
+```
+
+
+```{r}
+out2 = sgdi_lm(y~ edu * exp * exp2)
+ print(out2)
+```
+
+```{r}
+out2 = lm(y~ edu * exp * exp2)
+ print(out2)
+```
+
+```{r}
+out2 = sgdi_qr(y~ edu * exp * exp2)
+ print(out2)
+```
+
+```{r}
+out2 = sgdi_qr(y~ edu * exp * exp2, inference = "rsd")
+ print(out2)
+```
+
