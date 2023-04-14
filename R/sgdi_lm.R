@@ -113,7 +113,7 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
       V_out = rescale_matrix[rss_idx_r, rss_idx_r] %*% V_out %*% t(rescale_matrix[rss_idx_r, rss_idx_r])  
     } else if (inference == "rsd"){
       V_out = diag(rescale_matrix) * V_out * diag(rescale_matrix)
-      # With studentization, we cannot compute the variance of an intercept, which requires the whoel V_hat.
+      # With studentization, we cannot compute the variance of an intercept, which requires the whole V_hat.
       V_out[1] = NA 
     }
   }
