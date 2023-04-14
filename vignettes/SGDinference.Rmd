@@ -58,12 +58,6 @@ To illustrate the usefulness of the package, we use a small dataset included in 
 ```
 
 ```{r}
-out3 = sgdi_qr(y~ edu + exp + exp2,gamma_0=1)
-print(out3)
-```
-
-
-```{r}
 out2 = sgdi_lm(y~ edu * exp * exp2)
  print(out2)
 ```
