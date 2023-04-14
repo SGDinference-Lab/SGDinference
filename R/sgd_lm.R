@@ -10,7 +10,6 @@
 #' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
 #'
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -107,12 +106,6 @@ result.out$var <- NULL
 result.out$ci.lower = NULL
 result.out$ci.upper = NULL
   
-result.out$inference = inference
-
-if (inference == "rss"){
-  result.out$rss_idx = rss_idx
-}
-
 return(result.out)
 
 }

@@ -155,6 +155,12 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   result.out$ci.lower = ci.lower
   result.out$ci.upper = ci.upper
   
+  result.out$inference = inference
+  
+  if (inference == "rss"){
+    result.out$rss_idx_r = rss_idx_r
+  }
+  
   return(result.out)
   
 }
