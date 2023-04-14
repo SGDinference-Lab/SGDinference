@@ -32,8 +32,7 @@
 
 sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
                 bt_start = NULL,  
-                studentize = TRUE, intercept = TRUE,
-                inference = "rs"
+                studentize = TRUE, intercept = TRUE
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
