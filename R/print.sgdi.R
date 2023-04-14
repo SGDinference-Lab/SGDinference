@@ -11,5 +11,11 @@ print.sgdi = function(x, ..., quote=FALSE) {
     inference.out = data.frame(Coefficient=x$coefficient, CI.Lower=x$ci.lower, CI.Upper = x$ci.upper)    
   }
   rownames(inference.out) = c("Intercept", attr(x$terms,"term.labels"))
-  print(inference.out, quote=quote)
+  if (x$inference == "rsd" ){
+    print(inference.out[-1,], quote=quote)
+  } else if (x$inference == "rss"){
+    print(inference.out[x$rss_idx_r,], quote=quote)
+  } else {
+    print(inference.out, quote=quote) 
+  }
 }

@@ -12,7 +12,6 @@
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
-#' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -33,11 +32,13 @@
 #' my.dat = data.frame(y=y, x=x)
 #' sgdi.out = sgdi_lm(y~., data=my.dat)
 
+# Todo list
+# (1) "rss" subset inference for linear regression
 
 sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
                 bt_start = NULL,  
                 studentize = TRUE, intercept = TRUE,
-                rss_idx = c(1), level = 0.95
+                rss_idx = c(1)
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
@@ -80,6 +81,7 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   c_t = 0
   V_t = NULL
 
+
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
@@ -113,7 +115,7 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
       V_out = rescale_matrix[rss_idx_r, rss_idx_r] %*% V_out %*% t(rescale_matrix[rss_idx_r, rss_idx_r])  
     } else if (inference == "rsd"){
       V_out = diag(rescale_matrix) * V_out * diag(rescale_matrix)
-      # With studentization, we cannot compute the variance of an intercept, which requires the whole V_hat.
+      # With studentization, we cannot compute the variance of an intercept, which requires the whoel V_hat.
       V_out[1] = NA 
     }
   }
@@ -127,19 +129,8 @@ result.out$coefficient = beta_hat
 result.out$call = cl
 result.out$terms <- mt
 result.out$var <- V_out
-
-if (level == 0.95) {
-  critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
-} else if (level == 0.9) {
-  critical.value = 5.323       # From Abadir and Paruolo (1997) Table 1. 95.0%  
-} else if (level == 0.8) {
-  critical.value = 3.875       # From Abadir and Paruolo (1997) Table 1. 90.0%  
-} else {
-  critical.value = 6.747
-  cat("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
-  cat("We report the default level 0.95. \n")
-}
-
+  
+critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%
 if (inference == "rs"){
   ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
   ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
@@ -154,7 +145,15 @@ if (inference == "rs"){
 
 result.out$ci.lower = ci.lower
 result.out$ci.upper = ci.upper
-  
+
+result.out$inference = inference
+
+if (inference == "rss"){
+  result.out$rss_idx_r = rss_idx_r
+}
+
 return(result.out)
 
 }
+
+

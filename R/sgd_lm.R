@@ -105,6 +105,11 @@ result.out$var <- NULL
 result.out$ci.lower = NULL
 result.out$ci.upper = NULL
   
+result.out$inference = inference
+
+if (inference == "rss"){
+  result.out$rss_idx = rss_idx
+}
 
 return(result.out)
 

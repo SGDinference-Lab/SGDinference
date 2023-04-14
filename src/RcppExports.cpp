@@ -62,24 +62,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// sgdi_lm_cpp_new
-List sgdi_lm_cpp_new(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference, const arma::uvec& rss_idx);
-RcppExport SEXP _SGDinference_sgdi_lm_cpp_new(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP, SEXP rss_idxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const arma::colvec& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const int& >::type burn(burnSEXP);
-    Rcpp::traits::input_parameter< const double& >::type gamma_0(gamma_0SEXP);
-    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type inference(inferenceSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type rss_idx(rss_idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgdi_lm_cpp_new(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx));
-    return rcpp_result_gen;
-END_RCPP
-}
 // sgdi_qr_cpp
 List sgdi_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference, const double& tau, const arma::uvec& rss_idx);
 RcppExport SEXP _SGDinference_sgdi_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP, SEXP tauSEXP, SEXP rss_idxSEXP) {
@@ -104,7 +86,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SGDinference_sgd_lm_cpp", (DL_FUNC) &_SGDinference_sgd_lm_cpp, 6},
     {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 7},
     {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 8},
-    {"_SGDinference_sgdi_lm_cpp_new", (DL_FUNC) &_SGDinference_sgdi_lm_cpp_new, 8},
     {"_SGDinference_sgdi_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_qr_cpp, 9},
     {NULL, NULL, 0}
 };
