@@ -34,6 +34,7 @@ test_that("sgdi_qr should work with option rsd", {
 #############################################
 ### Quantile Regression without Inference ###
 #############################################
+## NB: Without inference, we do not choose any option on V.hat estimation.
 test_that("sgd_qr should work with option rs", {
   n = 1e05
   p = 5
@@ -41,7 +42,7 @@ test_that("sgd_qr should work with option rs", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_qr(y~., data=my.dat, inference="rs")
+  out = sgd_qr(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgd_qr should work with option rss", {
@@ -51,7 +52,7 @@ test_that("sgd_qr should work with option rss", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_qr(y~., data=my.dat, inference="rss")
+  out = sgd_qr(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgd_qr should work with option rsd", {
@@ -61,7 +62,7 @@ test_that("sgd_qr should work with option rsd", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_qr(y~., data=my.dat, inference="rsd")
+  out = sgd_qr(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 #######################
@@ -74,7 +75,7 @@ test_that("sgdi_lm should work with option rs", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgdi_lm(y~., data=my.dat, inference="rs")
+  out = sgdi_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgdi_lm should work with option rss", {
@@ -84,7 +85,7 @@ test_that("sgdi_lm should work with option rss", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgdi_lm(y~., data=my.dat, inference="rss")
+  out = sgdi_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgdi_lm should work with option rsd", {
@@ -94,7 +95,7 @@ test_that("sgdi_lm should work with option rsd", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgdi_lm(y~., data=my.dat, inference="rsd")
+  out = sgdi_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 #########################################
@@ -107,7 +108,7 @@ test_that("sgd_lm should work with option rs", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_lm(y~., data=my.dat, inference="rs")
+  out = sgd_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgd_lm should work with option rss", {
@@ -117,7 +118,7 @@ test_that("sgd_lm should work with option rss", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_lm(y~., data=my.dat, inference="rss")
+  out = sgd_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 test_that("sgd_lm should work with option rsd", {
@@ -127,7 +128,7 @@ test_that("sgd_lm should work with option rsd", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_lm(y~., data=my.dat, inference="rsd")
+  out = sgd_lm(y~., data=my.dat)
   expect_error(print(out), NA)
 })
 
