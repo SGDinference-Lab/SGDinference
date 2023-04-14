@@ -1,15 +1,21 @@
 Package: SGDinference
 Type: Package
-Title: Inference with Stochastic sub-Gradient Descent
-Version: 0.0.0.9007
-Date: 2023-02-16
-Author: SGDinference-Lab
-Maintainer: Youngki Shin <yshin12@gmail.com>, Sokbae "Simon" Lee <sokbae@gmail.com>
-Description: This package provides R code to apply the S-subGD method. The algorithm is developed for fast and robust inference with large-scale quantile regression.
-License: MIT + file LICENSE
+Title: Inference with Stochastic (sub-)Gradient Descent
+Version: 0.0.1
+Authors@R: c(
+    person("Sokbae", "Lee", email = "sl3841@columbia.edu", role = "aut"),
+    person("Yuan", "Liao", email = "yuan.liao@rutgers.edu", role = "aut"),
+    person("Myung Hwan", "Seo", email = "myunghseo@snu.ac.kr", role = "aut"),
+    person("Youngki", "Shin", email = "shiny11@mcmaster.ca", role = c("aut", "cre")))
+Description: The package provides estimation and inference methods for large-scale mean and quantile regression models via stochastic (sub-)gradient descent (S-subGD) algorithms. 
+  The inference procedure handles cross-sectional data sequentially: 
+  (i) updating the parameter estimate with each incoming "new observation", 
+  (ii) aggregating it as a Polyak-Ruppert average, and 
+  (iii) computing an asympotically pivotal statistic for inference through random scaling.
+License: GPL-3
 Imports: Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Suggests: 
     knitr,
@@ -20,3 +26,5 @@ Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
 LazyData: true
+URL: https://github.com/SGDinference-Lab/SGDinference/
+BugReports: https://github.com/SGDinference-Lab/SGDinference/issues
