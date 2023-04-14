@@ -10,6 +10,7 @@
 #' @param bt_start numeric
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
 #'
 #' @return
 #' #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -32,7 +33,8 @@
 
 sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
                 bt_start = NULL,  
-                studentize = TRUE, intercept = TRUE
+                studentize = TRUE, intercept = TRUE,
+                inference = "rs"
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
