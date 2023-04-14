@@ -49,7 +49,12 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
   x <- model.matrix(mt, mf)[,-1]
-  rss_idx_r = rss_idx + 1   # Index starting with 1 in R and with 0 in C  
+  if (inference == "rss"){
+    if (0 %in% rss_idx ){
+      stop("rss_idx includes 0 (the intercept term), where it should be bigger than 1.")
+    }
+    rss_idx_r = rss_idx + 1   # Index starting with 1 in R and with 0 in C    
+  }
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
