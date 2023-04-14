@@ -1,27 +1,30 @@
 #' Averaged SGD and its Inference via Random Scaling
 #'
-#' Compute the averaged SGD estimator and the variance-covariance matrix via random scaling method.
+#' Compute the averaged SGD estimator and conduct inference via random scaling method.
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
 #' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
 #' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
 #' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
-#' @param model character specifying the model to be used: \code{"lm"} (linear
-#'   mean regression model), \code{"qr"} (quantile regression)
+#' @param model character specifying the model to be used: 
+#'  \code{"lm"} (linear mean regression model), 
+#'  \code{"qr"} (linear quantile regression model)
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
-#' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
+#' @param bt_start numeric. (p x 1) vector. User-provided starting value. Default is NULL.
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
+#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
+#'  For example, if we want to infer the 1st and 3rd covariates of x, then set it to be c(1,3).
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
 #' \describe{
 #' \item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
 #' \item{\code{V_hat}}{A (p+1)x (p+1) variance-covariance matrix of \code{beta_hat}}
-#' \item{\code{V_hat_sub}}{A variance-covariance sub-matrix of \code{beta_hat}. If the subset size is not provided, it returns 0.}
+#' \item{\code{V_hat_sub}}{A variance-covariance sub-matrix of \code{beta_hat}. 
+#'  If the subset size is not provided, it returns 0.}
 #' }
 #' @export
 #'
@@ -52,7 +55,6 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
     )
   }
   
-  
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
@@ -65,7 +67,6 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
   
 out$call = cl
 return(out)
-  
   
 }
 
