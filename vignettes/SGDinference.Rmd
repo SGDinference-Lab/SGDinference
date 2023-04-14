@@ -90,23 +90,3 @@ res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
                       times=100L)
 print(res)
 ```
-
-```{r}
-out2 = lm(y~ edu * exp * exp2)
- print(out2)
-```
-
-```{r}
-out = sgdi_lm(y~ edu * exp * exp2, inference = "rs")
- print(out)
-```
-
-```{r}
-out = sgdi_lm(y~ edu * exp * exp2, inference = "rsd")
- print(out)
-```
-
-```{r}
-out = sgdi_lm(y~ edu * exp * exp2, inference = "rss", rss_idx=c(0,1))
- print(out)
-```

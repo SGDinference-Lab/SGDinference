@@ -13,14 +13,19 @@ Description: The package provides estimation and inference methods for large-sca
   (ii) aggregating it as a Polyak-Ruppert average, and 
   (iii) computing an asympotically pivotal statistic for inference through random scaling.
 License: GPL-3
-Imports: Rcpp (>= 1.0.5)
+Imports: 
+    stats,
+    Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    lmtest (>= 0.9),
+    sandwich (>= 3.0),
+    microbenchmark (>= 1.4)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 
