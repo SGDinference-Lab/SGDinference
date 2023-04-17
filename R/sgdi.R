@@ -17,6 +17,7 @@
 #'    "rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.  
 #' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
 #' @param qt numeric. Quantile. Default is 0.5. This option is only relevant for quantile regression.
+#' @param studentize logical. Studentize regressors. Default is TRUE.
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 

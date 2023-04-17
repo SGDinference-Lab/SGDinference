@@ -19,7 +19,7 @@ test_that("sgdi_lm gamma_0 matters", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgdi_lm(y~., data=my.dat, gamma_0=0.1)
   out2 = sgdi_lm(y~., data=my.dat, gamma_0=10)
-  check = max(abs(out1$coefficient - out2$coefficient))
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_false(check==0)
 })
 
@@ -32,7 +32,7 @@ test_that("sgdi_lm vs. sgd_lm", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgd_lm(y~., data=my.dat)
   out2 = sgdi_lm(y~., data=my.dat)
-  check = max(abs(out1$coefficient - out2$coefficient))
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_true(check==0)
 })
 

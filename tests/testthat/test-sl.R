@@ -88,7 +88,7 @@ test_that("sgdi_lm: bt_start matters", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgdi_lm(y~., data=my.dat, bt_start=NULL)
   out2 = sgdi_lm(y~., data=my.dat, bt_start=bt0)
-  check = max(abs(out1$coefficient - out2$coefficient))
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_false(check==0)
 })
 

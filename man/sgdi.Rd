@@ -44,6 +44,8 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 
 \item{qt}{numeric. Quantile. Default is 0.5. This option is only relevant for quantile regression.}
 
+\item{studentize}{logical. Studentize regressors. Default is TRUE.}
+
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
 If this option is TRUE, the first element of the parameter vector is the intercept term.}
 

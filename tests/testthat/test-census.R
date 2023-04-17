@@ -7,7 +7,7 @@ test_that("sgdi_lm using Census2000", {
  out1 = lm(y ~ x)
   bh1 = out1$coefficients[2]
  out2 = sgdi_lm(y~ edu + exp + exp2,gamma_0=1)
-  bh2 = out2$coefficient[2]
+  bh2 = out2$coefficients[2]
   check = abs(bh1 - bh2)
   expect_true(check < 0.01)
 })
