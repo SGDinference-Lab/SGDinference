@@ -2,7 +2,7 @@
 % Please edit documentation in R/sgdi.R
 \name{sgdi}
 \alias{sgdi}
-\title{Averaged SGD and its Inference via Random Scaling}
+\title{Averaged SGD (or S-subGD) and its Inference via Random Scaling in Linear Mean or Quantile Regression Models}
 \usage{
 sgdi(
   formula,
@@ -16,7 +16,8 @@ sgdi(
   qt = 0.5,
   studentize = TRUE,
   intercept = TRUE,
-  rss_idx = c(1)
+  rss_idx = c(1),
+  level = 0.95
 )
 }
 \arguments{
@@ -28,36 +29,49 @@ sgdi(
 
 \item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.}
 
-\item{burn}{numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
+\item{burn}{numeric. A tuning parameter for "burn-in" observations. 
+We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
 
 \item{model}{character specifying the model to be used: 
 \code{"lm"} (linear mean regression model), 
 \code{"qr"} (linear quantile regression model)}
 
-\item{inference}{character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided.}
+\item{inference}{character. Specifying the inference method. Default is "rs" (random scaling matrix for joint inference using all the parameters). 
+"rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
+"rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.}
 
-\item{bt_start}{numeric. (p x 1) vector. User-provided starting value. Default is NULL.}
+\item{bt_start}{numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.}
 
-\item{qt}{numeric. Quantile. Default is 0.5.}
+\item{qt}{numeric. Quantile. Default is 0.5. This option is only relevant for quantile regression.}
 
-\item{studentize}{logical. Studentize regressors. Default is TRUE}
-
-\item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+\item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
+If this option is TRUE, the first element of the parameter vector is the intercept term.}
 
 \item{rss_idx}{numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
-For example, if we want to infer the 1st and 3rd covariates of x, then set it to be c(1,3).}
+For example, if we want to focus on the 1st and 3rd covariates of x, then set it to be c(1,3).}
+
+\item{level}{numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following
 \describe{
-\item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-\item{\code{V_hat}}{A (p+1)x (p+1) variance-covariance matrix of \code{beta_hat}}
-\item{\code{V_hat_sub}}{A variance-covariance sub-matrix of \code{beta_hat}. 
- If the subset size is not provided, it returns 0.}
+\item{\code{coefficients}}{a vector of estimated parameter values}
+\item{\code{V}}{a random scaling matrix depending on the inference method}
+\item{\code{ci.lower}}{a vector of lower confidence limits}
+\item{\code{ci.upper}}{a vector of upper confidence limits}
+\item{\code{inference}}{character that specifies the inference method}
 }
 }
 \description{
-Compute the averaged SGD estimator and conduct inference via random scaling method.
+Compute the averaged SGD (or S-subGD) estimator and conduct inference via random scaling method.
+}
+\note{
+{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.
+The random scaling matrix \code{V} is a full matrix if "rs" is chosen;
+it is a scalar or smaller matrix, depending on the specification of "rss_indx" if "rss" is selected;
+it is a vector of diagonal elements of the full matrix if "rsd" is selected. 
+In this case, the first element is missing if the intercept is included.
+The confidence intervals may contain NA under "rss" and "rsd".}
 }
 \examples{
 n = 1e05

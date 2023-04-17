@@ -1,19 +1,24 @@
-#' Averaged SGD and its Inference via Random Scaling
+#' Averaged SGD in Linear Mean Regression
 #'
-#' Compute the averaged SGD estimator and the confidence intervals via random scaling method.
+#' Compute the averaged SGD estimator for the coefficients in linear mean regression.
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
-#' @param gamma_0 numeric
-#' @param alpha numeric
-#' @param burn numeric
-#' @param bt_start numeric
-#' @param studentize logical. Studentize regressors. Default is TRUE
-#' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
+#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
+#' @param burn numeric. A tuning parameter for "burn-in" observations. 
+#'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
+#' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
+#' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
+#'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #'
 #' @return
-#' #' An object of class \code{"sgdi"}, which is a list containing the following
-#' components:
+#' An object of class \code{"sgdi"}, which is a list containing the following
+#' \describe{
+#' \item{\code{coefficients}}{a vector of estimated parameter values}
+#' }
+#' @note{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.}
 #'
 #' @export
 #'
@@ -25,10 +30,6 @@
 #' y = cbind(1,x) %*% bt0 + rnorm(n)
 #' my.dat = data.frame(y=y, x=x)
 #' sgd.out = sgd_lm(y~., data=my.dat)
-
-
-# Todo list
-# (1) "rss" subset inference for linear regression
 
 sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
                 bt_start = NULL,  
@@ -97,11 +98,10 @@ sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
 #--------------------------------------------
 result.out = list()
 class(result.out) = "sgdi"
-result.out$coefficient = beta_hat
+result.out$coefficients = beta_hat
 result.out$call = cl
 result.out$terms <- mt
-result.out$var <- NULL
-
+result.out$V <- NULL
 result.out$ci.lower = NULL
 result.out$ci.upper = NULL
   
@@ -109,5 +109,3 @@ return(result.out)
 
 }
 
-
-# beta_hat_path and V_hat_path are not completed in this code.

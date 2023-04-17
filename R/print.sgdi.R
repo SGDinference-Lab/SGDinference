@@ -6,11 +6,11 @@ print.sgdi = function(x, ..., quote=FALSE) {
   cat("\n")
   cat("Estimation Results: \n")
   if (is.null(x$ci.lower)){
-    inference.out = data.frame(Coefficient=x$coefficient)    
+    inference.out = data.frame(Coefficients=x$coefficients)    
     rownames(inference.out) = c("Intercept", attr(x$terms,"term.labels"))
     print(inference.out, quote=quote) 
   } else {
-    inference.out = data.frame(Coefficient=x$coefficient, CI.Lower=x$ci.lower, CI.Upper = x$ci.upper)    
+    inference.out = data.frame(Coefficients=x$coefficients, CI.Lower=x$ci.lower, CI.Upper = x$ci.upper)    
     rownames(inference.out) = c("Intercept", attr(x$terms,"term.labels"))
     if (x$inference == "rsd" ){
       print(inference.out[-1,], quote=quote)

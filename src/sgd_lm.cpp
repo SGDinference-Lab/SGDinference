@@ -28,9 +28,7 @@ List sgd_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, cons
     bar_bt_t = ( bar_bt_t*(obs - burn - 1) + bt_t ) / (obs - burn);
   }
   
-
   //-------------------------------------------
 
   return List::create(Named("beta_hat") = bar_bt_t);
 }
-

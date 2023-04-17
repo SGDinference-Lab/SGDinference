@@ -2,7 +2,7 @@
 % Please edit documentation in R/sgdi_lm.R
 \name{sgdi_lm}
 \alias{sgdi_lm}
-\title{Averaged SGD and its Inference via Random Scaling}
+\title{Averaged SGD and its Inference via Random Scaling in Linear Mean Regression}
 \usage{
 sgdi_lm(
   formula,
@@ -50,7 +50,7 @@ For example, if we want to focus on the 1st and 3rd covariates of x, then set it
 An object of class \code{"sgdi"}, which is a list containing the following
 \describe{
 \item{\code{coefficients}}{a vector of estimated parameter values}
-\item{\code{rsm}}{a random scaling matrix depending on the inference method}
+\item{\code{V}}{a random scaling matrix depending on the inference method}
 \item{\code{ci.lower}}{a vector of lower confidence limits}
 \item{\code{ci.upper}}{a vector of upper confidence limits}
 \item{\code{inference}}{character that specifies the inference method}
@@ -61,7 +61,7 @@ Compute the averaged SGD estimator for the coefficients in linear mean regressio
 }
 \note{
 {The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.
-The random scaling matrix \code{coefficients} is a full matrix if "rs" is chosen;
+The random scaling matrix \code{V} is a full matrix if "rs" is chosen;
 it is a scalar or smaller matrix, depending on the specification of "rss_indx" if "rss" is selected;
 it is a vector of diagonal elements of the full matrix if "rsd" is selected. 
 In this case, the first element is missing if the intercept is included.

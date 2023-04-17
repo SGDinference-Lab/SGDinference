@@ -63,7 +63,8 @@ List sgdi_lm_cpp(const arma::mat& x,
     if ( inference == "rsd") {
       A_td = A_td + std::pow(n_s, 2.0) * (bar_bt_t % bar_bt_t);
       b_td = b_td + std::pow(n_s, 2.0) * bar_bt_t;
-      c_t = c_t + std::pow(n_s, 2.0);      V_td = ( A_td - 2*( b_td % bar_bt_t ) + c_t * ( bar_bt_t % bar_bt_t ) ) / (std::pow(n_s, 2.0));
+      c_t = c_t + std::pow(n_s, 2.0);      
+      V_td = ( A_td - 2*( b_td % bar_bt_t ) + c_t * ( bar_bt_t % bar_bt_t ) ) / (std::pow(n_s, 2.0));
     }
   }
   n_s = n - burn;
