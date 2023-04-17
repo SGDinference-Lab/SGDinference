@@ -25,7 +25,6 @@ test_that("sgdi_qr vs. sgd_qr", {
   expect_true(check==0)
 })
 
-
 test_that("Stop when rss_idx includes 0 with inference=rss", 
           {
             n = 1e05
