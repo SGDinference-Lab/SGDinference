@@ -2,7 +2,7 @@
 % Please edit documentation in R/sgd_qr.R
 \name{sgd_qr}
 \alias{sgd_qr}
-\title{Averaged SsubGD estimator for quantile regression}
+\title{Averaged S-subGD Estimator in Linear Quantile Regression}
 \usage{
 sgd_qr(
   formula,
@@ -25,24 +25,29 @@ sgd_qr(
 
 \item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.}
 
-\item{burn}{numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
+\item{burn}{numeric. A tuning parameter for "burn-in" observations. 
+We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
 
-\item{bt_start}{numeric. (p x 1) vector. User-provided starting value Default is NULL.}
+\item{bt_start}{numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.}
 
 \item{qt}{numeric. Quantile. Default is 0.5.}
 
-\item{studentize}{logical. Studentize regressors. Default is TRUE}
+\item{studentize}{logical. Studentize regressors. Default is TRUE.}
 
-\item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+\item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
+If this option is TRUE, the first element of the parameter vector is the intercept term.}
 }
 \value{
-An object of class \code{"sgd_qr"}, which is a list containing the following
+An object of class \code{"sgdi"}, which is a list containing the following
 \describe{
-\item{\code{beta_hat}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+\item{\code{coefficients}}{a vector of estimated parameter values}
 }
 }
 \description{
-Compute the averaged SGD estimator for quantile regression. This function computes only the point estimate.
+Compute the averaged S-subGD (stochastic subgradient) estimator for the coefficients in linear quantile regression.
+}
+\note{
+{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.}
 }
 \examples{
 n = 1e05

@@ -1,28 +1,41 @@
-#' Inference of quantile regression with SGD and random scaling
+#' Averaged S-subGD and its Inference via Random Scaling in Linear Quantile Regression
 #'
-#' Compute the averaged SGD estimator of quantile regression and the confidence intervals of quantile regressionvia random scaling method.
+#' Compute the averaged S-subGD (stochastic subgradient) estimator for the coefficients in linear quantile regression and conduct inference via random scaling method.
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
 #' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
 #' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
-#' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
-#' @param inference character. Specifying the inference method. Default is "rs" (random scaling). "rss" is for ransom scaling subset inference. Then, "rss_indx" should be provided. 
-#' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
+#' @param burn numeric. A tuning parameter for "burn-in" observations. 
+#'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
+#' @param inference character. Specifying the inference method. Default is "rs" (random scaling matrix for joint inference using all the parameters). 
+#'    "rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
+#'    "rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.  
+#' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
 #' @param qt numeric. Quantile. Default is 0.5. 
-#' @param studentize logical. Studentize regressors. Default is TRUE
-#' @param intercept logical. Use the intercept term for regressors. Default is TRUE
-#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. For example, if we want to infer the 1st, 3rd covariate of x, then set it to be c(1,3).
-#' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.
+#' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
+#'    If this option is TRUE, the first element of the parameter vector is the intercept term.
+#' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
+#'    For example, if we want to focus on the 1st and 3rd covariates of x, then set it to be c(1,3).
+#' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80. 
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
 #' \describe{
-#' \item{\code{coefficient}}{A (p + 1)-vector of estimated parameter values including the intercept.}
-#' \item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
-#' \item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
-#' \item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
+#' \item{\code{coefficients}}{a vector of estimated parameter values}
+#' \item{\code{V}}{a random scaling matrix depending on the inference method}
+#' \item{\code{ci.lower}}{a vector of lower confidence limits}
+#' \item{\code{ci.upper}}{a vector of upper confidence limits}
+#' \item{\code{inference}}{character that specifies the inference method}
 #' }
+#' @note{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.
+#' The random scaling matrix \code{V} is a full matrix if "rs" is chosen;
+#' it is a scalar or smaller matrix, depending on the specification of "rss_indx" if "rss" is selected;
+#' it is a vector of diagonal elements of the full matrix if "rsd" is selected. 
+#' In this case, the first element is missing if the intercept is included.
+#' The confidence intervals may contain NA under "rss" and "rsd".}
+#' 
 #' @export
 #'
 #' @examples
@@ -118,8 +131,11 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
       V_out = rescale_matrix[rss_idx_r, rss_idx_r] %*% V_out %*% t(rescale_matrix[rss_idx_r, rss_idx_r])  
     } else if (inference == "rsd"){
       V_out = diag(rescale_matrix) * V_out * diag(rescale_matrix)
-      # With studentization, we cannot compute the variance of an intercept, which requires the whoel V_hat.
-      V_out[1] = NA 
+      # If both "intercept" and "studentize" options are selected, 
+      # we cannot compute the first diagonal element of the random scaling matrix because it requires the whole V_hat.
+      if (intercept){
+        V_out[1] = NA 
+      }
     }
   }
   
@@ -128,10 +144,10 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   #--------------------------------------------
   result.out = list()
   class(result.out) = "sgdi"
-  result.out$coefficient = beta_hat
+  result.out$coefficients = beta_hat
   result.out$call = cl
   result.out$terms <- mt
-  result.out$var <- V_out
+  result.out$V <- V_out
   
   if (level == 0.95) {
     critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  

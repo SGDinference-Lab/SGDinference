@@ -7,7 +7,7 @@ test_that("sgdi vs sgdi_qr", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgdi(y~., data=my.dat, model="qr")
   out2 = sgdi_qr(y~., data=my.dat)
-  check = max(abs(out1$coefficient - out2$coefficient))
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_true(check==0)
 })
 
@@ -20,7 +20,7 @@ test_that("sgdi vs sgdi_lm", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgdi(y~., data=my.dat, model="lm")
   out2 = sgdi_lm(y~., data=my.dat)
-  check = max(abs(out1$coefficient - out2$coefficient))
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_true(check==0)
 })
 
