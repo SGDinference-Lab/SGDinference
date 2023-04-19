@@ -14,6 +14,7 @@
 #' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
@@ -47,11 +48,19 @@
 #' my.dat = data.frame(y=y, x=x)
 #' sgdi.out = sgdi_qr(y~., data=my.dat)
 
-sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
-                   bt_start = NULL, qt=0.5,
-                   studentize = TRUE, intercept = TRUE,
-                   rss_idx = c(1), level = 0.95
-                  ){
+sgdi_qr = function(formula, 
+                  data, 
+                  gamma_0=1, 
+                  alpha=0.667, 
+                  burn=1, 
+                  inference="rs",
+                  bt_start = NULL, 
+                  qt=0.5,
+                  studentize = TRUE, 
+                  no_studentize = 100L,
+                  intercept = TRUE,
+                  rss_idx = c(1), 
+                  level = 0.95){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -71,17 +80,23 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
-    x_mean = apply(x, 2, mean)
-    x_sd = apply(x, 2, sd)
-    
-    # Studentize each column if x
-    x = apply(x, 2, function(.) (.-mean(.))/sd(.) )
+    if (no_studentize > length(y)) {
+      cat("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
+      no_studentize = length(y)
+    }
+    x_mean = apply(x[1:no_studentize, , drop=F], 2, mean)
+    x_sd = apply(x[1:no_studentize, , drop=F], 2, sd)
+    if (intercept){
+      x = cbind(1, x)
+      x_mean_in = c(0,x_mean)
+      x_sd_in = c(1,x_sd)
+    } else {
+      x_mean_in = x_mean
+      x_sd_in = x_sd
+    }
   }
   
   # Attach a vector of 1's for an intercept term
-  if (intercept){
-    x = cbind(1, x)
-  }
   
   # Get the dimension of x and the sample size: p and n
   p = ncol(as.matrix(x))
@@ -101,7 +116,7 @@ sgdi_qr = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
-  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx)
+  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat

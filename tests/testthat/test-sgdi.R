@@ -24,3 +24,16 @@ test_that("sgdi vs sgdi_lm", {
   expect_true(check==0)
 })
 
+test_that("no_studentize is bigger than the sample size.", {
+  n = 50
+  p = 2
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_lm(y~., data=my.dat)
+  out2 = sgdi_lm(y~., data=my.dat, no_studentize = n)
+  check = max(abs(out1$coefficients - out2$coefficients))
+  expect_true(check==0)
+})
+

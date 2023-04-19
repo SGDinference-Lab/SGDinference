@@ -5,7 +5,7 @@ test_that("sgdi_qr gamma_0 matters", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out1 = sgdi_qr(y~., data=my.dat, gamma_0=0.1)
+  out1 = sgdi_qr(y~., data=my.dat, gamma_0=0.01)
   check = max(abs(out1$coefficients - bt0))
   expect_true(check > 1)
 })

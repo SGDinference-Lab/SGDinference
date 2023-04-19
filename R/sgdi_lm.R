@@ -1,18 +1,18 @@
-#' Averaged SGD and its Inference via Random Scaling in Linear Mean Regression
+#' Averaged SGD and its Inference via Random Scaling
 #'
-#' Compute the averaged SGD estimator for the coefficients in linear mean regression and conduct inference via random scaling method.
+#' Compute the averaged SGD estimator and conduct inference via random scaling method.
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
 #' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
 #' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
-#' @param burn numeric. A tuning parameter for "burn-in" observations. 
-#'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
+#' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling matrix for joint inference using all the parameters). 
 #'    "rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
 #'    "rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.  
-#' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
-#' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param bt_start numeric. (p x 1) vector. User-provided starting value Default is NULL.
+#' @param studentize logical. Studentize regressors. Default is TRUE
+#' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
@@ -22,19 +22,11 @@
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
 #' \describe{
-#' \item{\code{coefficients}}{a vector of estimated parameter values}
-#' \item{\code{V}}{a random scaling matrix depending on the inference method}
-#' \item{\code{ci.lower}}{a vector of lower confidence limits}
-#' \item{\code{ci.upper}}{a vector of upper confidence limits}
-#' \item{\code{inference}}{character that specifies the inference method}
+#' \item{\code{coefficient}}{A (p + 1)-vector of estimated parameter values including the intercept.}
+#' \item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
+#' \item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
+#' \item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
 #' }
-#' @note{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.
-#' The random scaling matrix \code{V} is a full matrix if "rs" is chosen;
-#' it is a scalar or smaller matrix, depending on the specification of "rss_indx" if "rss" is selected;
-#' it is a vector of diagonal elements of the full matrix if "rsd" is selected. 
-#' In this case, the first element is missing if the intercept is included.
-#' The confidence intervals may contain NA under "rss" and "rsd".}
-#' 
 #' @export
 #'
 #' @examples
@@ -46,11 +38,17 @@
 #' my.dat = data.frame(y=y, x=x)
 #' sgdi.out = sgdi_lm(y~., data=my.dat)
 
-sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs",
-                bt_start = NULL,  
-                studentize = TRUE, intercept = TRUE,
-                rss_idx = c(1), level = 0.95
-                ){
+sgdi_lm = function(formula, 
+                  data, 
+                  gamma_0=1, 
+                  alpha=0.667, 
+                  burn=1, 
+                  inference="rs",
+                  bt_start = NULL,  
+                  studentize = TRUE, 
+                  no_studentize = 100L,
+                  intercept = TRUE,
+                  rss_idx = c(1), level = 0.95){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -60,7 +58,7 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   mf <- eval(mf, parent.frame())
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
-  x <- model.matrix(mt, mf)[,-1]
+  x <- as.matrix(model.matrix(mt, mf, drop=F)[,-1])
   if (inference == "rss"){
     if (0 %in% rss_idx ){
       stop("rss_idx includes 0 (the intercept term), where it should be bigger than 1.")
@@ -68,19 +66,33 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
     rss_idx_r = rss_idx + 1   # Index starting with 1 in R and with 0 in C    
   }
 
+  
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
-    x_mean = apply(x, 2, mean)
-    x_sd = apply(x, 2, sd)
-
-    # Studentize each column if x
-    x = apply(x, 2, function(.) (.-mean(.))/sd(.) )
+    if (no_studentize > length(y)) {
+      cat("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
+      no_studentize = length(y)
+    }
+    x_mean = apply(x[1:no_studentize, , drop=F], 2, mean)
+    x_sd = apply(x[1:no_studentize, , drop=F], 2, sd)
+    if (intercept){
+      x = cbind(1, x)
+      x_mean_in = c(0,x_mean)
+      x_sd_in = c(1,x_sd)
+    } else {
+      x_mean_in = x_mean
+      x_sd_in = x_sd
+    }
+  } else {
+    if (intercept){
+      x = cbind(1, x)
+    }  
+    # They are irrelevant in computation but should be initialized. We set some extreme numbers.
+    x_mean_in = -1e06
+    x_sd_in = -1.0
   }
 
   # Attach a vector of 1's for an intercept term
-  if (intercept){
-    x = cbind(1, x)
-  }
 
   # Get the dimension of x and the sample size: p and n
   p = ncol(as.matrix(x))
@@ -97,10 +109,11 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
   c_t = 0
   V_t = NULL
 
+
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx)
+  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat
@@ -130,12 +143,9 @@ sgdi_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, inference="rs"
       V_out = rescale_matrix[rss_idx_r, rss_idx_r] %*% V_out %*% t(rescale_matrix[rss_idx_r, rss_idx_r])  
     } else if (inference == "rsd"){
       V_out = diag(rescale_matrix) * V_out * diag(rescale_matrix)
-      # If both "intercept" and "studentize" options are selected, 
-      # we cannot compute the first diagonal element of the random scaling matrix because it requires the whole V_hat.
-      if (intercept){
-        V_out[1] = NA 
-      }
-    }  
+      # With studentization, we cannot compute the variance of an intercept, which requires the whole V_hat.
+      V_out[1] = NA 
+    }
   }
 
 #--------------------------------------------
@@ -175,6 +185,7 @@ if (inference == "rs"){
 result.out$ci.lower = ci.lower
 result.out$ci.upper = ci.upper
 
+result.out$intercept = intercept
 result.out$inference = inference
 
 if (inference == "rss"){

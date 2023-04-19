@@ -18,6 +18,7 @@
 #' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
 #' @param qt numeric. Quantile. Default is 0.5. This option is only relevant for quantile regression.
 #' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
@@ -51,10 +52,20 @@
 #' my.dat = data.frame(y=y, x=x)
 #' out = sgdi(y~., data=my.dat)
 
-sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", inference="rs",
-                     bt_start = NULL, qt=0.5,
-                     studentize = TRUE, intercept = TRUE, rss_idx = c(1), level=0.95
-){
+sgdi = function(formula, 
+                data, 
+                gamma_0=1, 
+                alpha=0.667, 
+                burn=1, 
+                model="lm", 
+                inference="rs",
+                bt_start = NULL, 
+                qt=0.5, 
+                studentize = TRUE,
+                no_studentize = 100L,
+                intercept = TRUE, 
+                rss_idx = c(1), 
+                level=0.95){
   V_hat_sub = 0
   cl <- match.call()
   
@@ -62,12 +73,23 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
   # Linear (Mean) Regression 
   #----------------------------------------------
   if (model=="lm"){
-    out = sgdi_lm(formula, data, gamma_0, alpha, burn, inference,
-                   bt_start, 
-                   studentize, intercept, level
+    out = sgdi_lm(formula, 
+                  data, 
+                  gamma_0 = gamma_0, 
+                  alpha = alpha, 
+                  burn = burn, 
+                  inference = inference,
+                  bt_start = bt_start, 
+                  studentize = studentize, 
+                  no_studentize = no_studentize,
+                  intercept = intercept, 
+                  rss_idx = rss_idx,
+                  level = level
     )
   }
-  
+
+                     
+                     
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
@@ -78,7 +100,7 @@ sgdi = function(formula, data, gamma_0=1, alpha=0.667, burn=1, model="lm", infer
     )
   }
   
-out$call = cl
+#out$call = cl
 return(out)
   
 }
