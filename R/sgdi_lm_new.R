@@ -140,10 +140,10 @@ sgdi_lm_new = function(formula,
 #--------------------------------------------
 result.out = list()
 class(result.out) = "sgdi"
-result.out$coefficient = beta_hat
+result.out$coefficients = beta_hat
 result.out$call = cl
 result.out$terms <- mt
-result.out$var <- V_out
+result.out$V <- V_out
   
 if (level == 0.95) {
   critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
