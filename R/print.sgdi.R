@@ -5,6 +5,7 @@ print.sgdi = function(x, ..., quote=FALSE) {
   print(x$call, quote=quote)
   cat("\n")
   cat("Estimation Results: \n")
+  cat("CI significance level:",x$level*100, "% \n")
   if (is.null(x$ci.lower)){
     inference.out = data.frame(Coefficient=x$coefficients)
     if (x$intercept){

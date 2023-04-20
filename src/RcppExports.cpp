@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // sgd_lm_cpp
-List sgd_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start);
-RcppExport SEXP _SGDinference_sgd_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP) {
+List sgd_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const arma::rowvec& x_mean, const arma::rowvec& x_sd);
+RcppExport SEXP _SGDinference_sgd_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,13 +23,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double& >::type gamma_0(gamma_0SEXP);
     Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start));
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type x_mean(x_meanSEXP);
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type x_sd(x_sdSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean, x_sd));
     return rcpp_result_gen;
 END_RCPP
 }
 // sgd_qr_cpp
-List sgd_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const double& tau);
-RcppExport SEXP _SGDinference_sgd_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP tauSEXP) {
+List sgd_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const double& tau, const arma::rowvec& x_mean, const arma::rowvec& x_sd);
+RcppExport SEXP _SGDinference_sgd_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP tauSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -40,7 +42,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
     Rcpp::traits::input_parameter< const double& >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start, tau));
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type x_mean(x_meanSEXP);
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type x_sd(x_sdSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -87,8 +91,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SGDinference_sgd_lm_cpp", (DL_FUNC) &_SGDinference_sgd_lm_cpp, 6},
-    {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 7},
+    {"_SGDinference_sgd_lm_cpp", (DL_FUNC) &_SGDinference_sgd_lm_cpp, 8},
+    {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 9},
     {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 10},
     {"_SGDinference_sgdi_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_qr_cpp, 11},
     {NULL, NULL, 0}

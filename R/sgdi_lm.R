@@ -48,7 +48,8 @@ sgdi_lm = function(formula,
                   studentize = TRUE, 
                   no_studentize = 100L,
                   intercept = TRUE,
-                  rss_idx = c(1), level = 0.95){
+                  rss_idx = c(1), 
+                  level = 0.95){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -148,52 +149,54 @@ sgdi_lm = function(formula,
     }
   }
 
-#--------------------------------------------
-# out: list of all outputs
-#--------------------------------------------
-result.out = list()
-class(result.out) = "sgdi"
-result.out$coefficients = beta_hat
-result.out$call = cl
-result.out$terms <- mt
-result.out$V <- V_out
+  #--------------------------------------------
+  # out: list of all outputs
+  #--------------------------------------------
+  result.out = list()
+  class(result.out) = "sgdi"
+  result.out$coefficients = beta_hat
+  result.out$call = cl
+  result.out$terms <- mt
+  result.out$V <- V_out
+    
+  if (level == 0.95) {
+    critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
+  } else if (level == 0.9) {
+    critical.value = 5.323       # From Abadir and Paruolo (1997) Table 1. 95.0%  
+  } else if (level == 0.8) {
+    critical.value = 3.875       # From Abadir and Paruolo (1997) Table 1. 90.0%  
+  } else {
+    critical.value = 6.747
+    cat("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
+    cat("We report the default level 0.95. \n")
+  }
   
-if (level == 0.95) {
-  critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
-} else if (level == 0.9) {
-  critical.value = 5.323       # From Abadir and Paruolo (1997) Table 1. 95.0%  
-} else if (level == 0.8) {
-  critical.value = 3.875       # From Abadir and Paruolo (1997) Table 1. 90.0%  
-} else {
-  critical.value = 6.747
-  cat("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
-  cat("We report the default level 0.95. \n")
+  if (inference == "rs"){
+    ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
+    ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
+  } else if (inference == "rss"){
+    ci.lower = ci.upper = matrix(NA, p, 1)
+    ci.lower[rss_idx_r] = beta_hat[rss_idx_r] - critical.value * sqrt(diag(V_out)/n)
+    ci.upper[rss_idx_r] = beta_hat[rss_idx_r] + critical.value * sqrt(diag(V_out)/n) 
+  } else if (inference == "rsd"){
+    ci.lower = beta_hat - critical.value * sqrt(V_out/n)
+    ci.upper = beta_hat + critical.value * sqrt(V_out/n) 
+  }
+  
+  result.out$ci.lower = ci.lower
+  result.out$ci.upper = ci.upper
+  
+  result.out$intercept = intercept
+  result.out$inference = inference
+  result.out$level = level
+  
+  if (inference == "rss"){
+    result.out$rss_idx_r = rss_idx_r
+  }
+  
+  return(result.out)
+  
 }
-
-if (inference == "rs"){
-  ci.lower = beta_hat - critical.value * sqrt(diag(V_out)/n)
-  ci.upper = beta_hat + critical.value * sqrt(diag(V_out)/n) 
-} else if (inference == "rss"){
-  ci.lower = ci.upper = matrix(NA, p, 1)
-  ci.lower[rss_idx_r] = beta_hat[rss_idx_r] - critical.value * sqrt(diag(V_out)/n)
-  ci.upper[rss_idx_r] = beta_hat[rss_idx_r] + critical.value * sqrt(diag(V_out)/n) 
-} else if (inference == "rsd"){
-  ci.lower = beta_hat - critical.value * sqrt(V_out/n)
-  ci.upper = beta_hat + critical.value * sqrt(V_out/n) 
-}
-
-result.out$ci.lower = ci.lower
-result.out$ci.upper = ci.upper
-
-result.out$intercept = intercept
-result.out$inference = inference
-
-if (inference == "rss"){
-  result.out$rss_idx_r = rss_idx_r
-}
-
-return(result.out)
-
-}
-
-
+  
+  
+  

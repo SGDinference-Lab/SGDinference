@@ -57,7 +57,8 @@ test_that("Run the code with an option studentize=F",
             y = cbind(1,x) %*% bt0 + rnorm(n)
             my.dat = data.frame(y=y, x=x)
             out1 = sgdi_lm(y~., data=my.dat, studentize=F)
-            check = max(abs(out1$coefficients - bt0))
+            out2 = sgdi_lm(y~., data=my.dat, studentize=T)
+            check = max(abs(out1$coefficients - out2$coefficients))
             expect_true(check<1e-2)
           }
 )

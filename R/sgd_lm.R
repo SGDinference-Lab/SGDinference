@@ -10,6 +10,7 @@
 #'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
 #' @param studentize logical. Studentize regressors. Default is TRUE.
+#' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
 #'
@@ -31,9 +32,15 @@
 #' my.dat = data.frame(y=y, x=x)
 #' sgd.out = sgd_lm(y~., data=my.dat)
 
-sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1, 
-                bt_start = NULL,  
-                studentize = TRUE, intercept = TRUE
+sgd_lm = function(formula, 
+                  data, 
+                  gamma_0=1, 
+                  alpha=0.667, 
+                  burn=1, 
+                  bt_start = NULL,  
+                  studentize = TRUE, 
+                  no_studentize = 100L,
+                  intercept = TRUE
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
@@ -48,17 +55,29 @@ sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
-    x_mean = apply(x, 2, mean)
-    x_sd = apply(x, 2, sd)
-
-    # Studentize each column if x
-    x = apply(x, 2, function(.) (.-mean(.))/sd(.) )
+    if (no_studentize > length(y)) {
+      cat("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
+      no_studentize = length(y)
+    }
+    x_mean = apply(x[1:no_studentize, , drop=F], 2, mean)
+    x_sd = apply(x[1:no_studentize, , drop=F], 2, sd)
+    if (intercept){
+      x = cbind(1, x)
+      x_mean_in = c(0,x_mean)
+      x_sd_in = c(1,x_sd)
+    } else {
+      x_mean_in = x_mean
+      x_sd_in = x_sd
+    }
+  } else {
+    if (intercept){
+      x = cbind(1, x)
+    }  
+    # They are irrelevant in computation but should be initialized. We set some extreme numbers.
+    x_mean_in = -1e06
+    x_sd_in = -1.0
   }
-
-  # Attach a vector of 1's for an intercept term
-  if (intercept){
-    x = cbind(1, x)
-  }
+  
 
   # Get the dimension of x and the sample size: p and n
   p = ncol(as.matrix(x))
@@ -74,7 +93,7 @@ sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start)
+  out = sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean=x_mean_in, x_sd=x_sd_in)
   beta_hat = out$beta_hat
 
   # Re-scale parameters to reflect the studentization
@@ -99,6 +118,7 @@ sgd_lm = function(formula, data, gamma_0=1, alpha=0.667, burn=1,
 result.out = list()
 class(result.out) = "sgdi"
 result.out$coefficients = beta_hat
+result.out$intercept = intercept
 result.out$call = cl
 result.out$terms <- mt
 result.out$V <- NULL

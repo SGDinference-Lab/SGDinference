@@ -34,3 +34,34 @@ test_that("Stop when rss_idx includes 0 with inference=rss",
             expect_error(sgdi_qr(y~., data=my.dat, inference="rss", rss_idx=c(0,1)))
           }
 )
+
+
+test_that("Run the code with an option studentize=F", 
+          {
+            n = 1e05
+            p = 5
+            bt0 = rep(5,p)
+            x = matrix(rnorm(n*(p-1)), n, (p-1))
+            y = cbind(1,x) %*% bt0 + rnorm(n)
+            my.dat = data.frame(y=y, x=x)
+            out1 = sgdi_qr(y~., data=my.dat, studentize=F)
+            out2 = sgdi_qr(y~., data=my.dat, studentize=T)
+            check = max(abs(out1$coefficients - out2$coefficients))
+            expect_true(check<1e-2)
+          }
+)
+
+test_that("Different significance levels", 
+          {
+            n = 1e05
+            p = 5
+            bt0 = rep(5,p)
+            x = matrix(rnorm(n*(p-1)), n, (p-1))
+            y = cbind(1,x) %*% bt0 + rnorm(n)
+            my.dat = data.frame(y=y, x=x)
+            out1 = sgdi_qr(y~., data=my.dat, level=0.95)
+            out2 = sgdi_qr(y~., data=my.dat, level=0.90)
+            check = out1$ci.upper[1]- - out2$ci.upper[1]
+            expect_true(check>0)
+          }
+)

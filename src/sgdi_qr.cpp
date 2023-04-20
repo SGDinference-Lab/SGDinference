@@ -39,37 +39,69 @@ List sgdi_qr_cpp(const arma::mat& x,
   arma::vec b_td = arma::vec(p);
   arma::vec V_td = arma::vec(p);
 
-  if (burn > 1) {
-    for(int obs = 1; obs < (burn+1); obs++){
+  if (x_sd(0) < 0) {
+    if (burn > 1) {
+      for(int obs = 1; obs < (burn+1); obs++){
+        learning_rate_new = gamma_0 * std::pow(obs, -alpha);
+        gradient_bt_new = ( trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * bt_t)) - tau) );
+        bt_t = bt_t - learning_rate_new * gradient_bt_new;
+      }
+    }
+  
+    for (int obs = (burn+1); obs < (n+1); obs++){
       learning_rate_new = gamma_0 * std::pow(obs, -alpha);
-      gradient_bt_new = trans((x.row(obs-1)-x_mean)/x_sd) * ((x.row(obs-1)-x_mean)/x_sd * bt_t - y(obs-1));
+      gradient_bt_new = ( trans(x.row(obs-1)) * ( (y(obs-1) < as_scalar(x.row(obs-1) * bt_t)) - tau) );
       bt_t = bt_t - learning_rate_new * gradient_bt_new;
+      n_s = obs - burn;
+      bar_bt_t = ( bar_bt_t*(n_s - 1) + bt_t ) / (n_s);
+      if ( inference == "rs") {
+        A_t = A_t + std::pow(n_s, 2.0) * bar_bt_t * trans(bar_bt_t);
+        b_t = b_t + std::pow(n_s, 2.0) * bar_bt_t;
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
+      if ( inference == "rss") {
+        A_ts = A_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx) * trans(bar_bt_t(rss_idx));
+        b_ts = b_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx);
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
+      if ( inference == "rsd") {
+        A_td = A_td + std::pow(n_s, 2.0) * (bar_bt_t % bar_bt_t);
+        b_td = b_td + std::pow(n_s, 2.0) * bar_bt_t;
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
+    }
+  } else {
+    if (burn > 1) {
+      for(int obs = 1; obs < (burn+1); obs++){
+        learning_rate_new = gamma_0 * std::pow(obs, -alpha);
+        gradient_bt_new = ( trans((x.row(obs-1)-x_mean)/x_sd) * ( (y(obs-1) < as_scalar((x.row(obs-1)-x_mean)/x_sd * bt_t)) - tau) );
+        bt_t = bt_t - learning_rate_new * gradient_bt_new;
+      }
+    }
+    
+    for (int obs = (burn+1); obs < (n+1); obs++){
+      learning_rate_new = gamma_0 * std::pow(obs, -alpha);
+      gradient_bt_new = ( trans((x.row(obs-1)-x_mean)/x_sd) * ( (y(obs-1) < as_scalar((x.row(obs-1)-x_mean)/x_sd * bt_t)) - tau) );
+      bt_t = bt_t - learning_rate_new * gradient_bt_new;
+      n_s = obs - burn;
+      bar_bt_t = ( bar_bt_t*(n_s - 1) + bt_t ) / (n_s);
+      if ( inference == "rs") {
+        A_t = A_t + std::pow(n_s, 2.0) * bar_bt_t * trans(bar_bt_t);
+        b_t = b_t + std::pow(n_s, 2.0) * bar_bt_t;
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
+      if ( inference == "rss") {
+        A_ts = A_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx) * trans(bar_bt_t(rss_idx));
+        b_ts = b_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx);
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
+      if ( inference == "rsd") {
+        A_td = A_td + std::pow(n_s, 2.0) * (bar_bt_t % bar_bt_t);
+        b_td = b_td + std::pow(n_s, 2.0) * bar_bt_t;
+        c_t = c_t + std::pow(n_s, 2.0);
+      }
     }
   }
-
-  for (int obs = (burn+1); obs < (n+1); obs++){
-    learning_rate_new = gamma_0 * std::pow(obs, -alpha);
-    gradient_bt_new = trans((x.row(obs-1)-x_mean)/x_sd) * ((x.row(obs-1)-x_mean)/x_sd * bt_t - y(obs-1));
-    bt_t = bt_t - learning_rate_new * gradient_bt_new;
-    n_s = obs - burn;
-    bar_bt_t = ( bar_bt_t*(n_s - 1) + bt_t ) / (n_s);
-    if ( inference == "rs") {
-      A_t = A_t + std::pow(n_s, 2.0) * bar_bt_t * trans(bar_bt_t);
-      b_t = b_t + std::pow(n_s, 2.0) * bar_bt_t;
-      c_t = c_t + std::pow(n_s, 2.0);
-    }
-    if ( inference == "rss") {
-      A_ts = A_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx) * trans(bar_bt_t(rss_idx));
-      b_ts = b_ts + std::pow(n_s, 2.0) * bar_bt_t(rss_idx);
-      c_t = c_t + std::pow(n_s, 2.0);
-    }
-    if ( inference == "rsd") {
-      A_td = A_td + std::pow(n_s, 2.0) * (bar_bt_t % bar_bt_t);
-      b_td = b_td + std::pow(n_s, 2.0) * bar_bt_t;
-      c_t = c_t + std::pow(n_s, 2.0);
-    }
-  }
-
   n_s = n - burn;
   if ( inference == "rs") {
     V_t = ( A_t - b_t * trans(bar_bt_t) - bar_bt_t * trans(b_t) + c_t * bar_bt_t * trans(bar_bt_t) ) / (std::pow(n_s, 2.0));

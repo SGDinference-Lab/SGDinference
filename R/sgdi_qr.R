@@ -94,6 +94,13 @@ sgdi_qr = function(formula,
       x_mean_in = x_mean
       x_sd_in = x_sd
     }
+  } else {
+    if (intercept){
+      x = cbind(1, x)
+    }  
+    # They are irrelevant in computation but should be initialized. We set some extreme numbers.
+    x_mean_in = -1e06
+    x_sd_in = -1.0
   }
   
   # Attach a vector of 1's for an intercept term
@@ -191,7 +198,9 @@ sgdi_qr = function(formula,
   result.out$ci.lower = ci.lower
   result.out$ci.upper = ci.upper
   
+  result.out$intercept = intercept
   result.out$inference = inference
+  result.out$level = level
   
   if (inference == "rss"){
     result.out$rss_idx_r = rss_idx_r
