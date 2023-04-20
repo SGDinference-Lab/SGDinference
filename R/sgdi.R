@@ -94,9 +94,19 @@ sgdi = function(formula,
   # Quantile Regression
   #----------------------------------------------
   if (model=="qr"){
-    out = sgdi_qr(formula, data, gamma_0, alpha, burn, inference,
-                  bt_start, qt,
-                  studentize, intercept, level
+    out = sgdi_qr(formula, 
+                  data, 
+                  gamma_0 = gamma_0, 
+                  alpha = alpha, 
+                  burn = burn, 
+                  inference = inference,
+                  bt_start = bt_start, 
+                  qt = qt,
+                  studentize = studentize, 
+                  no_studentize = no_studentize,
+                  intercept = intercept, 
+                  rss_idx = rss_idx,
+                  level = level
     )
   }
   

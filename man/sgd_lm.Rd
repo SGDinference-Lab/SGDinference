@@ -12,6 +12,7 @@ sgd_lm(
   burn = 1,
   bt_start = NULL,
   studentize = TRUE,
+  no_studentize = 100L,
   intercept = TRUE
 )
 }
@@ -30,6 +31,8 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 \item{bt_start}{numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE.}
+
+\item{no_studentize}{numeric. The number of observations to compute the mean and std error for studentization. Default is 100.}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
 If this option is TRUE, the first element of the parameter vector is the intercept term.}

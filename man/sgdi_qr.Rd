@@ -14,6 +14,7 @@ sgdi_qr(
   bt_start = NULL,
   qt = 0.5,
   studentize = TRUE,
+  no_studentize = 100L,
   intercept = TRUE,
   rss_idx = c(1),
   level = 0.95
@@ -40,6 +41,8 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 \item{qt}{numeric. Quantile. Default is 0.5.}
 
 \item{studentize}{logical. Studentize regressors. Default is TRUE.}
+
+\item{no_studentize}{numeric. The number of observations to compute the mean and std error for studentization. Default is 100.}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
 If this option is TRUE, the first element of the parameter vector is the intercept term.}

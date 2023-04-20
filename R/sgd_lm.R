@@ -119,6 +119,7 @@ result.out = list()
 class(result.out) = "sgdi"
 result.out$coefficients = beta_hat
 result.out$intercept = intercept
+result.out$level = 0
 result.out$call = cl
 result.out$terms <- mt
 result.out$V <- NULL
