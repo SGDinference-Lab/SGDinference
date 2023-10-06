@@ -17,7 +17,9 @@ sgdi_qr(
   no_studentize = 100L,
   intercept = TRUE,
   rss_idx = c(1),
-  level = 0.95
+  level = 0.95,
+  path = FALSE,
+  path_index = c(1)
 )
 }
 \arguments{
@@ -51,6 +53,10 @@ If this option is TRUE, the first element of the parameter vector is the interce
 For example, if we want to focus on the 1st and 3rd covariates of x, then set it to be c(1,3).}
 
 \item{level}{numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.}
+
+\item{path}{logical. The whole path of estimation results is out. Default is FALSE.}
+
+\item{path_index}{numeric. A vector of indices to print out the path. Default is 1.}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following

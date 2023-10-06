@@ -5,15 +5,19 @@ sgd_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, x_mean, x_sd) {
     .Call('_SGDinference_sgd_lm_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, x_mean, x_sd)
 }
 
-sgd_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd) {
-    .Call('_SGDinference_sgd_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd)
+sgd_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd, path) {
+    .Call('_SGDinference_sgd_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd, path)
+}
+
+sgdi_boot_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau, n_boot) {
+    .Call('_SGDinference_sgdi_boot_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, tau, n_boot)
 }
 
 sgdi_lm_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean, x_sd) {
     .Call('_SGDinference_sgdi_lm_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean, x_sd)
 }
 
-sgdi_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau, rss_idx, x_mean, x_sd) {
-    .Call('_SGDinference_sgdi_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, tau, rss_idx, x_mean, x_sd)
+sgdi_qr_cpp <- function(x, y, burn, gamma_0, alpha, bt_start, inference, tau, rss_idx, x_mean, x_sd, path, path_index) {
+    .Call('_SGDinference_sgdi_qr_cpp', PACKAGE = 'SGDinference', x, y, burn, gamma_0, alpha, bt_start, inference, tau, rss_idx, x_mean, x_sd, path, path_index)
 }
 

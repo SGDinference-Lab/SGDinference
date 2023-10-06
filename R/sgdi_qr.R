@@ -20,6 +20,8 @@
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
 #'    For example, if we want to focus on the 1st and 3rd covariates of x, then set it to be c(1,3).
 #' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80. 
+#' @param path logical. The whole path of estimation results is out. Default is FALSE.
+#' @param path_index numeric. A vector of indices to print out the path. Default is 1.
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -51,7 +53,7 @@
 sgdi_qr = function(formula, 
                   data, 
                   gamma_0=1, 
-                  alpha=0.667, 
+                  alpha=0.667, # Might need to fix 0.501
                   burn=1, 
                   inference="rs",
                   bt_start = NULL, 
@@ -60,7 +62,9 @@ sgdi_qr = function(formula,
                   no_studentize = 100L,
                   intercept = TRUE,
                   rss_idx = c(1), 
-                  level = 0.95){
+                  level = 0.95,
+                  path = FALSE,
+                  path_index = c(1)){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -103,36 +107,6 @@ sgdi_qr = function(formula,
     x_sd_in = -1.0
   }
   
-  # Attach a vector of 1's for an intercept term
-  
-  # Get the dimension of x and the sample size: p and n
-  p = ncol(as.matrix(x))
-  n = length(y)
-  
-  # Initialize the bt_t, A_t, b_t, c_t
-  if (is.null(bt_start)){
-    bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
-  } else {
-    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
-  }
-  A_t = matrix(0, p, p)
-  b_t = matrix(0, p, 1)
-  c_t = 0
-  V_t = NULL
-  
-  #----------------------------------------------
-  # Quantile Regression
-  #----------------------------------------------
-  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
-  beta_hat = out$beta_hat
-  if (inference == "rs"){
-    V_out = out$V_hat
-  } else if (inference == "rss"){
-    V_out = out$V_hat_sub
-  } else if (inference == "rsd"){
-    V_out = out$V_hat_diag
-  }
-  
   # Re-scale parameters to reflect the studentization
   if (studentize){
     if (length(x_sd)>1){
@@ -144,6 +118,41 @@ sgdi_qr = function(formula,
       # Redefine the rescale_matrix including the intercept term
       rescale_matrix = rbind(c(1,-(x_mean/x_sd)), cbind(0, rescale_matrix))
     }
+  }
+  # Attach a vector of 1's for an intercept term
+  
+  # Get the dimension of x and the sample size: p and n
+  p = ncol(as.matrix(x))
+  n = length(y)
+  
+  # Initialize the bt_t, A_t, b_t, c_t
+  if (is.null(bt_start)){
+    bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+  } else {
+    if (studentize){
+      bt_start = solve(rescale_matrix,bt_start)  
+    }
+    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
+  }
+  A_t = matrix(0, p, p)
+  b_t = matrix(0, p, 1)
+  c_t = 0
+  V_t = NULL
+  
+  #----------------------------------------------
+  # Quantile Regression
+  #----------------------------------------------
+  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in, path=path, path_index=path_index)
+  beta_hat = out$beta_hat
+  if (inference == "rs"){
+    V_out = out$V_hat
+  } else if (inference == "rss"){
+    V_out = out$V_hat_sub
+  } else if (inference == "rsd"){
+    V_out = out$V_hat_diag
+  }
+  
+  if (studentize){
     # Re-scale the parameters
     beta_hat = rescale_matrix %*% beta_hat
     # Re-scale the variance
@@ -170,6 +179,10 @@ sgdi_qr = function(formula,
   result.out$call = cl
   result.out$terms <- mt
   result.out$V <- V_out
+  
+  if (path){
+    result.out$beta_hat_path = out$beta_hat_path
+  }
   
   if (level == 0.95) {
     critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  

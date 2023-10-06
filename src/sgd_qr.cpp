@@ -11,7 +11,8 @@ List sgd_qr_cpp(const arma::mat& x,
                 const arma::colvec& bt_start, 
                 const double& tau,
                 const arma::rowvec& x_mean,
-                const arma::rowvec& x_sd) {
+                const arma::rowvec& x_sd,
+                const bool& path) {
   int n = y.n_elem;
   double learning_rate_new;
   arma::colvec gradient_bt_new;
