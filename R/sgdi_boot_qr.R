@@ -20,13 +20,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' n = 1e05
-#' p = 5
-#' bt0 = rep(5,p)
-#' x = matrix(rnorm(n*(p-1)), n, (p-1))
-#' y = cbind(1,x) %*% bt0 + rnorm(n)
-#' sgdi.out = sgdi_qr(x,y)
 
 
 sgdi_boot_qr = function(x, y, gamma_0=1, alpha=0.667, burn=1, inference="boot",

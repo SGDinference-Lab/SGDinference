@@ -14,7 +14,8 @@ sgd_qr(
   qt = 0.5,
   studentize = TRUE,
   no_studentize = 100L,
-  intercept = TRUE
+  intercept = TRUE,
+  path = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
 If this option is TRUE, the first element of the parameter vector is the intercept term.}
+
+\item{path}{logical. Compute the whole path of parameters. Default is FALSE.}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following

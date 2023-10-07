@@ -14,6 +14,7 @@
 #' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
+#' @param path logical. Compute the whole path of parameters. Default is FALSE.    
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -42,7 +43,8 @@ sgd_qr = function(formula,
                   qt=0.5,
                   studentize = TRUE, 
                   no_studentize = 100L,
-                  intercept = TRUE
+                  intercept = TRUE,
+                  path = FALSE
                 ){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
@@ -95,7 +97,7 @@ sgd_qr = function(formula,
   # Quantile Regression
   #----------------------------------------------
 
-    out = sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, tau=qt, x_mean=x_mean_in, x_sd=x_sd_in)
+    out = sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, tau=qt, x_mean=x_mean_in, x_sd=x_sd_in, path=path)
     beta_hat = out$beta_hat
 
   # Re-scale parameters to reflect the studentization

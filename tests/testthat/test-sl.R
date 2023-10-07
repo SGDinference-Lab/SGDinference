@@ -42,7 +42,7 @@ test_that("sgd_qr should work", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out = sgd_qr(y~., data=my.dat)
+  out = sgd_qr(y~., data=my.dat, path=F)
   expect_error(print(out), NA)
 })
 

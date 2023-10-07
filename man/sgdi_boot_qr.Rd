@@ -49,11 +49,3 @@ components:
 \description{
 Compute the averaged SGD estimator of quantile regression and the confidence intervals via random scaling method.
 }
-\examples{
-n = 1e05
-p = 5
-bt0 = rep(5,p)
-x = matrix(rnorm(n*(p-1)), n, (p-1))
-y = cbind(1,x) \%*\% bt0 + rnorm(n)
-sgdi.out = sgdi_qr(x,y)
-}
