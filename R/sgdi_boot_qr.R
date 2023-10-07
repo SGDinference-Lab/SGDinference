@@ -12,6 +12,7 @@
 #' @param path_output numeric specifying the sequence that print out the output paths
 #' @param studentize logical. Studentize regressors. Default is TRUE
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE
+#' @param n_boot numberic. The number of bootstrap simulations. Default is 1000. 
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' 
 #' @return

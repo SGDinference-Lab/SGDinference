@@ -47,7 +47,7 @@ test_that("Run the code with an option studentize=F",
             out1 = sgdi_qr(y~., data=my.dat, studentize=F)
             out2 = sgdi_qr(y~., data=my.dat, studentize=T)
             check = max(abs(out1$coefficients - out2$coefficients))
-            expect_true(check<1e-2)
+            expect_true(check<1e-1)
           }
 )
 

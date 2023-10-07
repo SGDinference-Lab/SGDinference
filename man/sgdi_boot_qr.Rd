@@ -41,6 +41,8 @@ sgdi_boot_qr(
 \item{studentize}{logical. Studentize regressors. Default is TRUE}
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE}
+
+\item{n_boot}{numberic. The number of bootstrap simulations. Default is 1000.}
 }
 \value{
 #' An object of class \code{"sgdi"}, which is a list containing the following
