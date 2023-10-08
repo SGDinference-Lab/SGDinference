@@ -62,3 +62,68 @@ test_that("Run the code with an option studentize=F",
             expect_true(check<1e-2)
           }
 )
+
+test_that("sgdi_lm option burn matters", {
+  n = 1e05
+  p = 5
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_lm(y~., data=my.dat)
+  out2 = sgdi_lm(y~., data=my.dat, burn=1000)
+  check = max(abs(out1$coefficients - out2$coefficients))
+  expect_false(check==0)
+})
+
+test_that("sgdi_lm option intercept matters", {
+  n = 1e05
+  p = 5
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_lm(y~., data=my.dat)
+  out2 = sgdi_lm(y~., data=my.dat, intercept=FALSE)
+  check = max(abs(out1$coefficients[1] - out2$coefficients[1]))
+  expect_false(check==0)
+})
+
+test_that("sgdi_lm option level matters 1", {
+  n = 1e05
+  p = 5
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_lm(y~., data=my.dat)
+  out2 = sgdi_lm(y~., data=my.dat, level=0.9)
+  check = max(abs(out1$ci.lower - out2$ci.lower))
+  expect_false(check==0)
+})
+
+test_that("sgdi_lm option level matters 2", {
+  n = 1e05
+  p = 5
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_lm(y~., data=my.dat)
+  out2 = sgdi_lm(y~., data=my.dat, level=0.8)
+  check = max(abs(out1$ci.lower - out2$ci.lower))
+  expect_false(check==0)
+})
+
+  test_that("sgdi_lm option level matters 3", {
+    n = 1e05
+    p = 5
+    bt0 = rep(5,p)
+    x = matrix(rnorm(n*(p-1)), n, (p-1))
+    y = cbind(1,x) %*% bt0 + rnorm(n)
+    my.dat = data.frame(y=y, x=x)
+    out1 = sgdi_lm(y~., data=my.dat)
+    out2 = sgdi_lm(y~., data=my.dat, level=0.7)
+    check = max(abs(out1$ci.lower - out2$ci.lower))  
+  expect_true(check==0)
+})
