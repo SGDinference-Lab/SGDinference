@@ -20,7 +20,7 @@ __SGDinference__ is an R package that provides estimation and inference methods 
 
   (i) updating the parameter estimate with each incoming "new observation", 
   (ii) aggregating it as a Polyak-Ruppert average, and 
-  (iii) computing an asympotically pivotal statistic for inference through random scaling.
+  (iii) computing an asymptotically pivotal statistic for inference through random scaling.
 
 The methodology used in the SGDinference package is described in detail in the following papers:
 
@@ -70,23 +70,63 @@ print(results)
 We now estimate the same model using SGD. 
 
 ```{r}
- mincer_sgd = sgdi_lm(y~ edu + exp + exp2)
+ mincer_sgd = sgdi_lm(y ~ edu + exp + exp2)
  print(mincer_sgd)
 ```
 It can be seen that the estimation results are similar between two methods. 
 There is a different command that only computes the estimates but not confidence intervals.
 
 ```{r}
- mincer_sgd = sgd_lm(y~ edu + exp + exp2)
+ mincer_sgd = sgd_lm(y ~ edu + exp + exp2)
  print(mincer_sgd)
 ```
 
-We compare the execution times between two versions and find that there is not much difference in this simple example.
+We compare the execution times between two versions and find that there is not much difference in this simple example. By construction, it takes more time to conduct inference via `sgdi_lm`.
 
 ```{r}
 library(microbenchmark)
 res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
-                      sgdi_lm(y~ edu + exp + exp2),
+                      sgdi_lm(y ~ edu + exp + exp2),
                       times=100L)
 print(res)
 ```
+
+One can use command `sgdi' to obtain the same result.
+```{r, eval = FALSE}
+# currently it does not work (to be fixed)
+ mincer_sgd = sgdi(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+```
+
+We now estimate a quantile regression version of the Mincer equation.
+```{r}
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+```
+
+The default quantile level is 0.5, as seen below.
+```{r}
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+ mincer_sgd_median = sgdi_qr(y ~ edu + exp + exp2, qt=0.5)
+ print(mincer_sgd_median)
+```
+
+We now consider alternative quantile levels.
+```{r}
+ mincer_sgd_p10 = sgdi_qr(y ~ edu + exp + exp2, qt=0.1)
+ print(mincer_sgd_p10)
+ mincer_sgd_p90 = sgdi_qr(y ~ edu + exp + exp2, qt=0.9)
+ print(mincer_sgd_p90)
+```
+
+A bootstrap version can be implementable by the following command.
+```{r, eval = FALSE}
+# currently it does not work (to be fixed)
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+ mincer_sgd_bt = sgdi_boot_qr(y ~ edu + exp + exp2, n_boot=100)
+ print(mincer_sgd_bt)
+```
+
+
