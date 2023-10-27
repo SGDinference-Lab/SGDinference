@@ -3,8 +3,6 @@
 S3method(print,sgdi)
 export(sgd_lm)
 export(sgd_qr)
-export(sgdi)
-export(sgdi_boot_qr)
 export(sgdi_lm)
 export(sgdi_qr)
 import(Rcpp)
