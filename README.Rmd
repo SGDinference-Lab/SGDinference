@@ -13,6 +13,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+# This version is 2023-10-27
+- It contains sgdi.R the wrapper code
+- It contains sgdi_boot_qr.R code
+- Both of them will be deleted in the new version
+
 # SGDinference
 
 <!-- badges: start -->

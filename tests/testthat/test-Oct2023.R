@@ -15,6 +15,8 @@ test_that("expect no error using sgdi", {
   exp2 = exp^2
   x = cbind(edu, exp, exp2)
   out = sgdi(y ~ x)
+#  my.dat = data.frame(y,x)
+#  out = sgdi(y ~ x, data=my.dat)
   expect_no_error(out)
 # Currently, we have the following error message:
 # Error in `eval(mf, parent.frame())`: argument "data" is missing, with no default  
