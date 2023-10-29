@@ -1,0 +1,133 @@
+---
+title: "SGDinference: An R Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SGDinference: An R Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+__SGDinference__ is an R package that provides estimation and inference methods for large-scale mean and quantile regression models via stochastic (sub-)gradient descent (S-subGD) algorithms. The inference procedure handles cross-sectional data sequentially: 
+
+  (i) updating the parameter estimate with each incoming "new observation", 
+  (ii) aggregating it as a Polyak-Ruppert average, and 
+  (iii) computing an asymptotically pivotal statistic for inference through random scaling.
+
+The methodology used in the SGDinference package is described in detail in the following papers:
+
+- Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2022. Fast and robust online inference with stochastic gradient descent via random scaling. In _Proceedings of the AAAI Conference on Artificial Intelligence_ (Vol. 36, No. 7, pp. 7381-7389).
+<https://doi.org/10.1609/aaai.v36i7.20701>.
+
+- Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2023. Fast Inference for Quantile Regression with Tens of Millions of Observations. 	arXiv:2209.14502 [econ.EM] <https://doi.org/10.48550/arXiv.2209.14502>.
+
+We begin by calling the SGDinference package.
+
+```{r setup}
+library(SGDinference)
+```
+
+## Case Study: Estimating the Mincer Equation
+
+To illustrate the usefulness of the package, we use a small dataset included in the package.
+Specifically, the _Census2000_ dataset from Acemoglu and Autor (2011) consists of observations on 26,120 nonwhite, female workers. This small dataset is contructed from "microwage2000_ext.dta" at 
+<https://economics.mit.edu/people/faculty/david-h-autor/data-archive>.
+Observations are dropped if hourly wages are missing or years of education are smaller than 6.
+Then, a 5 percent random sample is drawn to make the dataset small.
+The following three variables are included:
+
+- ln_hrwage: log hourly wages
+- edyrs: years of education
+- exp: years of potential experience
+
+We now define the variables.
+
+```{r}
+    y = Census2000$ln_hrwage 
+  edu = Census2000$edyrs
+  exp = Census2000$exp
+ exp2 = exp^2/100
+```
+
+As a benchmark, we first estimate the Mincer equation and report the point estimates and their 95% heteroskedasticity-robust confidence intervals.
+
+```{r}
+mincer = lm(y ~ edu + exp + exp2)
+inference = lmtest::coefci(mincer, df = Inf,
+                             vcov = sandwich::vcovHC)
+results = cbind(mincer$coefficients,inference)
+colnames(results)[1] = "estimate"
+print(results)
+```
+We now estimate the same model using SGD. 
+
+```{r}
+ mincer_sgd = sgdi_lm(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+```
+It can be seen that the estimation results are similar between two methods. 
+There is a different command that only computes the estimates but not confidence intervals.
+
+```{r}
+ mincer_sgd = sgd_lm(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+```
+
+We compare the execution times between two versions and find that there is not much difference in this simple example. By construction, it takes more time to conduct inference via `sgdi_lm`.
+
+```{r}
+library(microbenchmark)
+res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
+                      sgdi_lm(y ~ edu + exp + exp2),
+                      times=100L)
+print(res)
+```
+
+[YS: We deleted the sgdi wrapper. We might want to drop this part of the vignette.]
+One can use command `sgdi' to obtain the same result.
+```{r, eval = FALSE}
+# currently it does not work (to be fixed)
+# mincer_sgd = sgdi(y ~ edu + exp + exp2)
+# print(mincer_sgd)
+```
+
+We now estimate a quantile regression version of the Mincer equation.
+```{r}
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+```
+
+The default quantile level is 0.5, as seen below.
+```{r}
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+ mincer_sgd_median = sgdi_qr(y ~ edu + exp + exp2, qt=0.5)
+ print(mincer_sgd_median)
+```
+
+We now consider alternative quantile levels.
+```{r}
+ mincer_sgd_p10 = sgdi_qr(y ~ edu + exp + exp2, qt=0.1)
+ print(mincer_sgd_p10)
+ mincer_sgd_p90 = sgdi_qr(y ~ edu + exp + exp2, qt=0.9)
+ print(mincer_sgd_p90)
+```
+
+A bootstrap version can be implementable by the following command.
+```{r, eval = FALSE}
+# currently it does not work (to be fixed)
+ mincer_sgd = sgdi_qr(y ~ edu + exp + exp2)
+ print(mincer_sgd)
+ mincer_sgd_bt = sgdi_boot_qr(y ~ edu + exp + exp2, n_boot=100)
+ print(mincer_sgd_bt)
+```
+
+
