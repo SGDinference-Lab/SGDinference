@@ -51,7 +51,7 @@ sgd_lm = function(formula,
   mf <- eval(mf, parent.frame())
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
-  x <- model.matrix(mt, mf)[,-1]
+  x <- as.matrix(model.matrix(mt, mf, drop=F)[,-1])
   
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion

@@ -74,7 +74,7 @@ sgdi_qr = function(formula,
   mf <- eval(mf, parent.frame())
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
-  x <- model.matrix(mt, mf)[,-1]
+  x <- as.matrix(model.matrix(mt, mf, drop=F)[,-1])
   if (inference == "rss"){
     if (0 %in% rss_idx ){
       stop("rss_idx includes 0 (the intercept term), where it should be bigger than 1.")
