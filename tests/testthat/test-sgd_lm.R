@@ -46,7 +46,7 @@ test_that("sgd_lm intercept matters 2", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgd_lm(y~., data=my.dat, studentize=FALSE)
   out2 = sgd_lm(y~., data=my.dat, studentize=FALSE, intercept=FALSE)
-  check = max(abs(out1$coefficientscoefficients[-1] - out2$coefficients))
+  check = max(abs(out1$coefficients[-1] - out2$coefficients))
   expect_false(check==0)
 })
 
@@ -88,4 +88,15 @@ test_that("sgd_lm burn matters 2", {
   check = max(abs(out1$coefficients - out2$coefficients))
   expect_false(check==0)
 })
-
+test_that("sgd_lm with scalar X", {
+  n = 1e05
+  p = 2
+  bt0 = rep(5,2)
+  x = 2*matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgd_lm(y~., data=my.dat, studentize=TRUE)
+  out2 = sgd_lm(y~., data=my.dat, studentize=FALSE)
+  check = max(abs(out1$coefficients - out2$coefficients))
+  expect_false(check==0)
+})
