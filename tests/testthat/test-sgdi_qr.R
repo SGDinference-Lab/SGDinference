@@ -131,7 +131,6 @@ test_that("sgdi_qr burn matters 2", {
   expect_false(check==0)
 })
 
-
 test_that("sgdi_qr path_index matters", {
   n = 1e05
   p = 5
@@ -142,5 +141,18 @@ test_that("sgdi_qr path_index matters", {
   out1 = sgdi_qr(y~., data=my.dat, path=TRUE, path_index=1)
   out2 = sgdi_qr(y~., data=my.dat, path=TRUE, path_index=2)
   check = max(abs(out1$beta_hat_path[100] - out2$beta_hat_path[100]))
+  expect_false(check==0)
+})
+
+test_that("sgdi_qr bt_start matters", {
+  n = 1e05
+  p = 5
+  bt0 = rep(5,p)
+  x = matrix(rnorm(n*(p-1)), n, (p-1))
+  y = cbind(1,x) %*% bt0 + rnorm(n)
+  my.dat = data.frame(y=y, x=x)
+  out1 = sgdi_qr(y~., data=my.dat)
+  out2 = sgdi_qr(y~., data=my.dat, bt_start=bt0)
+  check = max(abs(out1$coefficients - out2$coefficients))
   expect_false(check==0)
 })
