@@ -4,8 +4,8 @@
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
-#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
-#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
+#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method: 1/sd(y).
+#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.
 #' @param burn numeric. A tuning parameter for "burn-in" observations. We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling matrix for joint inference using all the parameters). 
 #'    "rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
@@ -40,8 +40,8 @@
 
 sgdi_lm = function(formula, 
                   data, 
-                  gamma_0=1, 
-                  alpha=0.667, 
+                  gamma_0=NULL, 
+                  alpha=0.501, 
                   burn=1, 
                   inference="rs",
                   bt_start = NULL,  
@@ -99,12 +99,18 @@ sgdi_lm = function(formula,
   p = ncol(as.matrix(x))
   n = length(y)
 
+  # Select gamma_0 by the data adaptive method
+  if (is.null(gamma_0)){
+    gamma_0 = 1 / sd(y)
+  }
+  
   # Initialize the bt_t, A_t, b_t, c_t
   if (is.null(bt_start)){
-    bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
-  } else {
-    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
-  }
+    #bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+    n_s = floor(max(c(n*0.01,p*10)))
+    subsample_index = sample(n, n_s)
+    bt_start = lm(y[subsample_index]~x[subsample_index,-1])$coefficients
+  } 
   A_t = matrix(0, p, p)
   b_t = matrix(0, p, 1)
   c_t = 0
@@ -114,7 +120,7 @@ sgdi_lm = function(formula,
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
+  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat
@@ -189,6 +195,7 @@ sgdi_lm = function(formula,
   result.out$intercept = intercept
   result.out$inference = inference
   result.out$level = level
+  result.out$gamma_0 = gamma_0
   
   if (inference == "rss"){
     result.out$rss_idx_r = rss_idx_r

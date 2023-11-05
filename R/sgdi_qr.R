@@ -4,14 +4,14 @@
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
-#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
-#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
+#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method in Chet et al. (2023).
+#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.
 #' @param burn numeric. A tuning parameter for "burn-in" observations. 
 #'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param inference character. Specifying the inference method. Default is "rs" (random scaling matrix for joint inference using all the parameters). 
 #'    "rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
 #'    "rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.  
-#' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
+#' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL. Then, it is estimated by conquer.
 #' @param qt numeric. Quantile. Default is 0.5. 
 #' @param studentize logical. Studentize regressors. Default is TRUE.
 #' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
@@ -52,8 +52,8 @@
 
 sgdi_qr = function(formula, 
                   data, 
-                  gamma_0=1, 
-                  alpha=0.667, # Might need to fix 0.501
+                  gamma_0=NULL, 
+                  alpha=0.501, # Might need to fix 0.501
                   burn=1, 
                   inference="rs",
                   bt_start = NULL, 
@@ -125,9 +125,18 @@ sgdi_qr = function(formula,
   p = ncol(as.matrix(x))
   n = length(y)
   
+  # Select gamma_0 by the data adaptive method
+  if (is.null(gamma_0)){
+    sig_hat = sd(y)
+    gamma_0 = (dnorm(qnorm(qt))/sqrt(qt*(1-qt))) / sig_hat
+  }
+  
   # Initialize the bt_t, A_t, b_t, c_t
   if (is.null(bt_start)){
-    bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+    #bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+    n_s = floor(max(c(n*0.01,p*10)))
+    subsample_index = sample(n, n_s)
+    bt_t = conquer::conquer(x[subsample_index,-1], y[subsample_index], tau = qt)$coeff
   } else {
     if (studentize){
       bt_start = solve(rescale_matrix,bt_start)  
@@ -214,6 +223,7 @@ sgdi_qr = function(formula,
   result.out$intercept = intercept
   result.out$inference = inference
   result.out$level = level
+  result.out$gamma_0 = gamma_0
   
   if (inference == "rss"){
     result.out$rss_idx_r = rss_idx_r

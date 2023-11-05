@@ -4,8 +4,8 @@
 #'
 #' @param formula formula. The response is on the left of a ~ operator. The terms are on the right of a ~ operator, separated by a + operator.
 #' @param data an optional data frame containing variables in the model. 
-#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.
-#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.
+#' @param gamma_0 numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method: 1/sd(y).
+#' @param alpha numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.
 #' @param burn numeric. A tuning parameter for "burn-in" observations. 
 #'    We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in. 
 #' @param bt_start numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.
@@ -34,8 +34,8 @@
 
 sgd_lm = function(formula, 
                   data, 
-                  gamma_0=1, 
-                  alpha=0.667, 
+                  gamma_0=NULL, 
+                  alpha=0.501, 
                   burn=1, 
                   bt_start = NULL,  
                   studentize = TRUE, 
@@ -83,12 +83,18 @@ sgd_lm = function(formula,
   p = ncol(as.matrix(x))
   n = length(y)
 
+  # Select gamma_0 by the data adaptive method
+  if (is.null(gamma_0)){
+    gamma_0 = 1 / sd(y)
+  }
+  
   # Initialize the bt_t, A_t, b_t, c_t
   if (is.null(bt_start)){
-    bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
-  } else {
-    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
-  }
+    #bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+    n_s = floor(max(c(n*0.01,p*10)))
+    subsample_index = sample(n, n_s)
+    bt_start = lm(y[subsample_index]~x[subsample_index,-1])$coefficients
+  } 
 
   #----------------------------------------------
   # Linear (Mean) Regression 
@@ -125,7 +131,8 @@ result.out$terms <- mt
 result.out$V <- NULL
 result.out$ci.lower = NULL
 result.out$ci.upper = NULL
-  
+result.out$gamma_0 = gamma_0
+
 return(result.out)
 
 }
