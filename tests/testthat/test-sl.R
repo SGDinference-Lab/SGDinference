@@ -86,8 +86,9 @@ test_that("sgdi_qr option level matters 3", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out1 = sgdi_qr(y~., data=my.dat)
-  out2 = sgdi_qr(y~., data=my.dat, level=0.7)
+  bt_start = bt0*rnorm(5, mean=1, sd=0.25) # Need the same starting value to expect_true
+  out1 = sgdi_qr(y~., data=my.dat, bt_start=bt_start)
+  out2 = sgdi_qr(y~., data=my.dat, bt_start=bt_start, level=0.7)
   check = max(abs(out1$ci.lower - out2$ci.lower))  
   expect_true(check==0)
 })
@@ -230,8 +231,9 @@ test_that("sgdi_lm option level matters 3", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out1 = sgdi_lm(y~., data=my.dat)
-  out2 = sgdi_lm(y~., data=my.dat, level=0.7)
+  bt_start = bt0*rnorm(5, mean=1, sd=0.25)  # Need the same starting value to expect_true
+  out1 = sgdi_lm(y~., data=my.dat, bt_start = bt_start)
+  out2 = sgdi_lm(y~., data=my.dat, bt_start = bt_start, level=0.7)
   check = max(abs(out1$ci.lower - out2$ci.lower))  
   expect_true(check==0)
 })

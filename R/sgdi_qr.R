@@ -133,16 +133,15 @@ sgdi_qr = function(formula,
   
   # Initialize the bt_t, A_t, b_t, c_t
   if (is.null(bt_start)){
-    #bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
+    # bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
     n_s = floor(max(c(n*0.01,p*10)))
     subsample_index = sample(n, n_s)
-    bt_t = conquer::conquer(x[subsample_index,-1], y[subsample_index], tau = qt)$coeff
-  } else {
-    if (studentize){
-      bt_start = solve(rescale_matrix,bt_start)  
+    if (intercept) {
+      bt_start = conquer::conquer(x[subsample_index,-1, drop=F], y[subsample_index], tau = qt)$coeff 
+    } else {
+      bt_start = conquer::conquer(x[subsample_index, , drop=F], y[subsample_index], tau = qt)$coeff[-1]
     }
-    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
-  }
+  } 
   A_t = matrix(0, p, p)
   b_t = matrix(0, p, 1)
   c_t = 0
@@ -151,7 +150,7 @@ sgdi_qr = function(formula,
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
-  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, inference=inference, tau=qt, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in, path=path, path_index=path_index)
+  out = sgdi_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_start, inference=inference, tau=qt, rss_idx=rss_idx, x_mean=x_mean_in, x_sd=x_sd_in, path=path, path_index=path_index)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat

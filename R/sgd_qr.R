@@ -97,16 +97,18 @@ sgd_qr = function(formula,
     # bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
     n_s = floor(max(c(n*0.01,p*10)))
     subsample_index = sample(n, n_s)
-    bt_t = conquer::conquer(x[subsample_index,-1], y[subsample_index], tau = qt)$coeff
-  } else {
-    bt_t = bar_bt_t = matrix(bt_start, nrow=p, ncol=1)
+    if (intercept) {
+      bt_start = conquer::conquer(x[subsample_index,-1, drop=F], y[subsample_index], tau = qt)$coeff 
+    } else {
+      bt_start = conquer::conquer(x[subsample_index, , drop=F], y[subsample_index], tau = qt)$coeff[-1]
+    }
   }
 
   #----------------------------------------------
   # Quantile Regression
   #----------------------------------------------
 
-    out = sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_t, tau=qt, x_mean=x_mean_in, x_sd=x_sd_in, path=path)
+    out = sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start=bt_start, tau=qt, x_mean=x_mean_in, x_sd=x_sd_in, path=path)
     beta_hat = out$beta_hat
 
   # Re-scale parameters to reflect the studentization

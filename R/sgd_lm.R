@@ -93,7 +93,11 @@ sgd_lm = function(formula,
     #bt_t = bar_bt_t = bt_start = matrix(0, nrow=p, ncol=1)
     n_s = floor(max(c(n*0.01,p*10)))
     subsample_index = sample(n, n_s)
-    bt_start = lm(y[subsample_index]~x[subsample_index,-1])$coefficients
+    if (intercept){
+      bt_start = lm(y[subsample_index]~x[subsample_index,-1])$coefficients
+    } else {
+      bt_start = lm(y[subsample_index]~x[subsample_index,]-1)$coefficients
+    }
   } 
 
   #----------------------------------------------

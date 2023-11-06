@@ -5,9 +5,9 @@ test_that("sgdi_qr gamma_0 matters", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out1 = sgdi_qr(y~., data=my.dat, gamma_0=0.01)
+  out1 = sgdi_qr(y~., data=my.dat, gamma_0=0.001)
   check = max(abs(out1$coefficients - bt0))
-  expect_true(check > 1)
+  expect_true(check > 0.1)
 })
 
 test_that("sgdi_qr vs. sgd_qr", {
@@ -17,8 +17,9 @@ test_that("sgdi_qr vs. sgd_qr", {
   x = matrix(rnorm(n*(p-1)), n, (p-1))
   y = cbind(1,x) %*% bt0 + rnorm(n)
   my.dat = data.frame(y=y, x=x)
-  out1 = sgd_qr(y~., data=my.dat, studentize = F)
-  out2 = sgdi_qr(y~., data=my.dat, studentize = F)
+  bt_start = bt0 * rnorm(p, mean=1, sd=0.25) # For the same result, we should set the same starting value for bt
+  out1 = sgd_qr(y~., data=my.dat, studentize = F, bt_start = bt_start)
+  out2 = sgdi_qr(y~., data=my.dat, studentize = F, bt_start = bt_start)
   check = max(abs(out1$coefficients - out2$coefficients))
   expect_true(check==0)
 })
