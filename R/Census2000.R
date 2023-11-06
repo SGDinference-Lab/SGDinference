@@ -2,7 +2,7 @@
 #'
 #' The Census2000 dataset 
 #' from Acemoglu and Autor (2011) consists of observations on 26,120 nonwhite, female workers. 
-#' This small dataset is contructed from "microwage2000_ext.dta" at 
+#' This small dataset is constructed from "microwage2000_ext.dta" at 
 #' \url{https://economics.mit.edu/people/faculty/david-h-autor/data-archive}.
 #' Specifically, observations are dropped if hourly wages are missing or 
 #' years of education are smaller than 6.    

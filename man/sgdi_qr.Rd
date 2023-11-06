@@ -27,7 +27,7 @@ sgdi_qr(
 
 \item{data}{an optional data frame containing variables in the model.}
 
-\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method in Chet et al. (2023).}
+\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method in Lee et al. (2023).}
 
 \item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.}
 
