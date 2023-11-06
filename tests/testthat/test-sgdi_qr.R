@@ -141,7 +141,7 @@ test_that("sgdi_qr path_index matters", {
   my.dat = data.frame(y=y, x=x)
   out1 = sgdi_qr(y~., data=my.dat, path=TRUE, path_index=1)
   out2 = sgdi_qr(y~., data=my.dat, path=TRUE, path_index=2)
-  check = max(abs(out1$beta_hat_path[100] - out2$beta_hat_path[100]))
+  check = max(abs(out1$path_coefficients[100] - out2$path_coefficients[100]))
   expect_false(check==0)
 })
 

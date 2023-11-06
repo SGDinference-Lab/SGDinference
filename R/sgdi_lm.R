@@ -18,6 +18,8 @@
 #' @param rss_idx numeric. Index of x for random scaling subset inference. Default is 1, the first regressor of x. 
 #'    For example, if we want to focus on the 1st and 3rd covariates of x, then set it to be c(1,3).
 #' @param level numeric. The confidence level required. Default is 0.95. Can choose 0.90 and 0.80.
+#' @param path logical. The whole path of estimation results is out. Default is FALSE.
+#' @param path_index numeric. A vector of indices to print out the path. Default is 1.
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
@@ -26,6 +28,8 @@
 #' \item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
 #' \item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
 #' \item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
+#' \item{\code{level}}{The confidence level required. Default is 0.95.}
+#' \item{\code{path_coefficients}}{The path of coefficients.}
 #' }
 #' @export
 #'
@@ -49,7 +53,9 @@ sgdi_lm = function(formula,
                   no_studentize = 100L,
                   intercept = TRUE,
                   rss_idx = c(1), 
-                  level = 0.95){
+                  level = 0.95,
+                  path = FALSE,
+                  path_index = c(1)){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -124,7 +130,7 @@ sgdi_lm = function(formula,
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean=x_mean_in, x_sd=x_sd_in)
+  out = sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean=x_mean_in, x_sd=x_sd_in, path=path, path_index=path_index)
   beta_hat = out$beta_hat
   if (inference == "rs"){
     V_out = out$V_hat
@@ -203,6 +209,14 @@ sgdi_lm = function(formula,
   
   if (inference == "rss"){
     result.out$rss_idx_r = rss_idx_r
+  }
+  
+  if (path){
+    if (studentize){
+      result.out$path_coefficients = (out$beta_hat_path) %*% t(rescale_matrix[path_index, path_index])
+    } else {
+      result.out$path_coefficients = out$beta_hat_path
+    }
   }
   
   return(result.out)

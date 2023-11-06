@@ -7,13 +7,15 @@
 sgd_lm(
   formula,
   data,
-  gamma_0 = 1,
-  alpha = 0.667,
+  gamma_0 = NULL,
+  alpha = 0.501,
   burn = 1,
   bt_start = NULL,
   studentize = TRUE,
   no_studentize = 100L,
-  intercept = TRUE
+  intercept = TRUE,
+  path = FALSE,
+  path_index = c(1)
 )
 }
 \arguments{
@@ -21,9 +23,9 @@ sgd_lm(
 
 \item{data}{an optional data frame containing variables in the model.}
 
-\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.}
+\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method: 1/sd(y).}
 
-\item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.}
+\item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.}
 
 \item{burn}{numeric. A tuning parameter for "burn-in" observations. 
 We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
@@ -36,6 +38,10 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 
 \item{intercept}{logical. Use the intercept term for regressors. Default is TRUE. 
 If this option is TRUE, the first element of the parameter vector is the intercept term.}
+
+\item{path}{logical. The whole path of estimation results is out. Default is FALSE.}
+
+\item{path_index}{numeric. A vector of indices to print out the path. Default is 1.}
 }
 \value{
 An object of class \code{"sgdi"}, which is a list containing the following

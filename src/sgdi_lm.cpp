@@ -12,16 +12,24 @@ List sgdi_lm_cpp(const arma::mat& x,
                  const std::string inference,
                  const arma::uvec& rss_idx,
                  const arma::rowvec& x_mean,
-                 const arma::rowvec& x_sd) {
+                 const arma::rowvec& x_sd,
+                 const bool& path,
+                 const arma::colvec& path_index) {
   int n = y.n_elem;
   double learning_rate_new;
   arma::colvec gradient_bt_new;
   arma::colvec bt_t = bt_start;
   int p = bt_t.n_elem;
   int n_s;
-  arma::colvec bar_bt_t;
-  bar_bt_t.zeros(p);
-
+  arma::colvec bar_bt_t = bt_start;
+  
+  // Initialize the path output variables when {path} is true
+  int p_path = path_index.n_elem;
+  arma::mat bar_bt_path = arma::mat(n,p_path);
+  for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
+    bar_bt_path(0, i_p_path) = bt_start(path_index(i_p_path)-1);
+  }
+  
   arma::mat A_t = arma::mat(p,p);
   arma::vec b_t = arma::vec(p);
   double c_t = 0.0;
@@ -53,6 +61,14 @@ List sgdi_lm_cpp(const arma::mat& x,
       bt_t = bt_t - learning_rate_new * gradient_bt_new;
       n_s = obs - burn;
       bar_bt_t = ( bar_bt_t*(n_s - 1) + bt_t ) / (n_s);
+      
+      // Save the bar_bt_t for the path outcome
+      if (path) {
+        for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
+          bar_bt_path(obs-1, i_p_path) = bar_bt_t(path_index(i_p_path)-1);
+        }
+      }
+      
       if ( inference == "rs") {
         A_t = A_t + std::pow(n_s, 2.0) * bar_bt_t * trans(bar_bt_t);
         b_t = b_t + std::pow(n_s, 2.0) * bar_bt_t;
@@ -84,6 +100,14 @@ List sgdi_lm_cpp(const arma::mat& x,
       bt_t = bt_t - learning_rate_new * gradient_bt_new;
       n_s = obs - burn;
       bar_bt_t = ( bar_bt_t*(n_s - 1) + bt_t ) / (n_s);
+      
+      // Save the bar_bt_t for the path outcome
+      if (path) {
+        for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
+          bar_bt_path(obs-1, i_p_path) = bar_bt_t(path_index(i_p_path)-1);
+        }
+      }
+      
       if ( inference == "rs") {
         A_t = A_t + std::pow(n_s, 2.0) * bar_bt_t * trans(bar_bt_t);
         b_t = b_t + std::pow(n_s, 2.0) * bar_bt_t;
@@ -116,5 +140,6 @@ List sgdi_lm_cpp(const arma::mat& x,
   return List::create(Named("beta_hat") = bar_bt_t,
                       Named("V_hat") = V_t,
                       Named("V_hat_sub") = V_ts,
-                      Named("V_hat_diag") = V_td);
+                      Named("V_hat_diag") = V_td,
+                      Named("beta_hat_path") = bar_bt_path);
 }

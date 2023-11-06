@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // sgd_lm_cpp
-List sgd_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const arma::rowvec& x_mean, const arma::rowvec& x_sd);
-RcppExport SEXP _SGDinference_sgd_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP) {
+List sgd_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const arma::rowvec& x_mean, const arma::rowvec& x_sd, const bool& path, const arma::colvec& path_index);
+RcppExport SEXP _SGDinference_sgd_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP, SEXP pathSEXP, SEXP path_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,13 +25,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::colvec& >::type bt_start(bt_startSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_mean(x_meanSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_sd(x_sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean, x_sd));
+    Rcpp::traits::input_parameter< const bool& >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type path_index(path_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean, x_sd, path, path_index));
     return rcpp_result_gen;
 END_RCPP
 }
 // sgd_qr_cpp
-List sgd_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const double& tau, const arma::rowvec& x_mean, const arma::rowvec& x_sd, const bool& path);
-RcppExport SEXP _SGDinference_sgd_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP tauSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP, SEXP pathSEXP) {
+List sgd_qr_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const double& tau, const arma::rowvec& x_mean, const arma::rowvec& x_sd, const bool& path, const arma::colvec& path_index);
+RcppExport SEXP _SGDinference_sgd_qr_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP tauSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP, SEXP pathSEXP, SEXP path_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -45,13 +47,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_mean(x_meanSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_sd(x_sdSEXP);
     Rcpp::traits::input_parameter< const bool& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd, path));
+    Rcpp::traits::input_parameter< const arma::colvec& >::type path_index(path_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgd_qr_cpp(x, y, burn, gamma_0, alpha, bt_start, tau, x_mean, x_sd, path, path_index));
     return rcpp_result_gen;
 END_RCPP
 }
 // sgdi_lm_cpp
-List sgdi_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference, const arma::uvec& rss_idx, const arma::rowvec& x_mean, const arma::rowvec& x_sd);
-RcppExport SEXP _SGDinference_sgdi_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP, SEXP rss_idxSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP) {
+List sgdi_lm_cpp(const arma::mat& x, const arma::colvec& y, const int& burn, const double& gamma_0, const double& alpha, const arma::colvec& bt_start, const std::string inference, const arma::uvec& rss_idx, const arma::rowvec& x_mean, const arma::rowvec& x_sd, const bool& path, const arma::colvec& path_index);
+RcppExport SEXP _SGDinference_sgdi_lm_cpp(SEXP xSEXP, SEXP ySEXP, SEXP burnSEXP, SEXP gamma_0SEXP, SEXP alphaSEXP, SEXP bt_startSEXP, SEXP inferenceSEXP, SEXP rss_idxSEXP, SEXP x_meanSEXP, SEXP x_sdSEXP, SEXP pathSEXP, SEXP path_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,7 +68,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::uvec& >::type rss_idx(rss_idxSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_mean(x_meanSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type x_sd(x_sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean, x_sd));
+    Rcpp::traits::input_parameter< const bool& >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type path_index(path_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgdi_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, inference, rss_idx, x_mean, x_sd, path, path_index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -94,9 +99,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SGDinference_sgd_lm_cpp", (DL_FUNC) &_SGDinference_sgd_lm_cpp, 8},
-    {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 10},
-    {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 10},
+    {"_SGDinference_sgd_lm_cpp", (DL_FUNC) &_SGDinference_sgd_lm_cpp, 10},
+    {"_SGDinference_sgd_qr_cpp", (DL_FUNC) &_SGDinference_sgd_qr_cpp, 11},
+    {"_SGDinference_sgdi_lm_cpp", (DL_FUNC) &_SGDinference_sgdi_lm_cpp, 12},
     {"_SGDinference_sgdi_qr_cpp", (DL_FUNC) &_SGDinference_sgdi_qr_cpp, 13},
     {NULL, NULL, 0}
 };

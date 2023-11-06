@@ -13,11 +13,14 @@
 #' @param no_studentize numeric. The number of observations to compute the mean and std error for studentization. Default is 100. 
 #' @param intercept logical. Use the intercept term for regressors. Default is TRUE. 
 #'    If this option is TRUE, the first element of the parameter vector is the intercept term.
+#' @param path logical. The whole path of estimation results is out. Default is FALSE.
+#' @param path_index numeric. A vector of indices to print out the path. Default is 1.
 #'
 #' @return
 #' An object of class \code{"sgdi"}, which is a list containing the following
 #' \describe{
 #' \item{\code{coefficients}}{a vector of estimated parameter values}
+#' \item{\code{path_coefficients}}{The path of coefficients.}
 #' }
 #' @note{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.}
 #'
@@ -40,8 +43,9 @@ sgd_lm = function(formula,
                   bt_start = NULL,  
                   studentize = TRUE, 
                   no_studentize = 100L,
-                  intercept = TRUE
-                ){
+                  intercept = TRUE,
+                  path = FALSE,
+                  path_index = c(1)){
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -103,7 +107,7 @@ sgd_lm = function(formula,
   #----------------------------------------------
   # Linear (Mean) Regression 
   #----------------------------------------------
-  out = sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean=x_mean_in, x_sd=x_sd_in)
+  out = sgd_lm_cpp(x, y, burn, gamma_0, alpha, bt_start, x_mean=x_mean_in, x_sd=x_sd_in, path=path, path_index=path_index)
   beta_hat = out$beta_hat
 
   # Re-scale parameters to reflect the studentization
@@ -136,6 +140,14 @@ result.out$V <- NULL
 result.out$ci.lower = NULL
 result.out$ci.upper = NULL
 result.out$gamma_0 = gamma_0
+
+if (path){
+  if (studentize){
+    result.out$path_coefficients = (out$beta_hat_path) %*% t(rescale_matrix[path_index, path_index] )
+  } else {
+    result.out$path_coefficients = out$beta_hat_path
+  }
+}
 
 return(result.out)
 

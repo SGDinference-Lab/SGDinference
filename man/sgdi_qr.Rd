@@ -7,8 +7,8 @@
 sgdi_qr(
   formula,
   data,
-  gamma_0 = 1,
-  alpha = 0.667,
+  gamma_0 = NULL,
+  alpha = 0.501,
   burn = 1,
   inference = "rs",
   bt_start = NULL,
@@ -27,9 +27,9 @@ sgdi_qr(
 
 \item{data}{an optional data frame containing variables in the model.}
 
-\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 1.}
+\item{gamma_0}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is NULL and it is determined by the adaptive method in Chet et al. (2023).}
 
-\item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.667.}
+\item{alpha}{numeric. A tuning parameter for the learning rate (gamma_0 x t ^ alpha). Default is 0.501.}
 
 \item{burn}{numeric. A tuning parameter for "burn-in" observations. 
 We burn-in up to (burn-1) observations and use observations from (burn) for estimation. Default is 1, i.e. no burn-in.}
@@ -38,7 +38,7 @@ We burn-in up to (burn-1) observations and use observations from (burn) for esti
 "rss" is for ransom scaling subset inference. This option requires that "rss_indx" should be provided.
 "rsd" is for the diagonal elements of the random scaling matrix, excluding one for the intercept term.}
 
-\item{bt_start}{numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL.}
+\item{bt_start}{numeric. (p x 1) vector, excluding the intercept term. User-provided starting value. Default is NULL. Then, it is estimated by conquer.}
 
 \item{qt}{numeric. Quantile. Default is 0.5.}
 

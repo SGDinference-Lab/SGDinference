@@ -31,6 +31,8 @@
 #' \item{\code{ci.lower}}{a vector of lower confidence limits}
 #' \item{\code{ci.upper}}{a vector of upper confidence limits}
 #' \item{\code{inference}}{character that specifies the inference method}
+#' \item{\code{level}}{The confidence level required. Default is 0.95.}
+#' \item{\code{path_coefficients}}{The path of coefficients.}
 #' }
 #' @note{The dimension of \code{coefficients} is (p+1) if \code{intercept}=TRUE or p otherwise.
 #' The random scaling matrix \code{V} is a full matrix if "rs" is chosen;
@@ -188,9 +190,7 @@ sgdi_qr = function(formula,
   result.out$terms <- mt
   result.out$V <- V_out
   
-  if (path){
-    result.out$beta_hat_path = out$beta_hat_path
-  }
+
   
   if (level == 0.95) {
     critical.value = 6.747       # From Abadir and Paruolo (1997) Table 1. 97.5%  
@@ -226,6 +226,14 @@ sgdi_qr = function(formula,
   
   if (inference == "rss"){
     result.out$rss_idx_r = rss_idx_r
+  }
+  
+  if (path){
+    if (studentize){
+      result.out$path_coefficients = (out$beta_hat_path) %*% t(rescale_matrix[path_index, path_index])
+    } else {
+      result.out$path_coefficients = out$beta_hat_path
+    }
   }
   
   return(result.out)

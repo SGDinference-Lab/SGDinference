@@ -23,14 +23,14 @@ List sgdi_qr_cpp(const arma::mat& x,
   int p = bt_t.n_elem;
   int n_s;
   arma::colvec bar_bt_t = bt_start;
-  // bar_bt_t.zeros(p);
-  
-  // Initialize the path output variables when {path} is true
-  //if (path) {
-    int p_path = path_index.n_elem;
-    arma::mat bar_bt_path = arma::mat(n,p_path);
-  //}
 
+  // Initialize the path output variables when {path} is true
+
+  int p_path = path_index.n_elem;
+  arma::mat bar_bt_path = arma::mat(n,p_path);
+  for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
+    bar_bt_path(0, i_p_path) = bt_start(path_index(i_p_path)-1);
+  }
   arma::mat A_t = arma::mat(p,p);
   arma::vec b_t = arma::vec(p);
   double c_t = 0.0;
@@ -46,7 +46,7 @@ List sgdi_qr_cpp(const arma::mat& x,
   arma::vec A_td = arma::vec(p);
   arma::vec b_td = arma::vec(p);
   arma::vec V_td = arma::vec(p);
-
+  
   if (x_sd(0) < 0) {  // No studentization part 
     if (burn > 1) {
       for(int obs = 1; obs < (burn+1); obs++){
@@ -66,7 +66,7 @@ List sgdi_qr_cpp(const arma::mat& x,
       // Save the bar_bt_t for the path outcome
       if (path) {
         for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
-          bar_bt_path(obs, i_p_path) = bar_bt_t(path_index(i_p_path));
+          bar_bt_path(obs-1, i_p_path) = bar_bt_t(path_index(i_p_path) - 1 );
         }
       }
       
@@ -105,7 +105,7 @@ List sgdi_qr_cpp(const arma::mat& x,
       // Save the bar_bt_t for the path outcome
       if (path) {
         for (int i_p_path = 0; i_p_path < p_path; i_p_path++) {
-          bar_bt_path(obs-1, i_p_path) = bar_bt_t(path_index(i_p_path));
+          bar_bt_path(obs-1, i_p_path) = bar_bt_t(path_index(i_p_path) - 1 );
         }
       }
       // Rcout << bar_bt_t(2) << '\n';
