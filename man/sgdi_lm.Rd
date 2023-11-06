@@ -61,6 +61,8 @@ An object of class \code{"sgdi"}, which is a list containing the following
 \item{\code{var}}{A (p+1)x (p+1) variance-covariance matrix of \code{coefficient}}
 \item{\code{ci.lower}}{The lower part of the 95\% confidence interval}
 \item{\code{ci.upper}}{The upper part of the 95\% confidence interval}
+\item{\code{level}}{The confidence level required. Default is 0.95.}
+\item{\code{path_coefficients}}{The path of coefficients.}
 }
 }
 \description{

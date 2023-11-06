@@ -66,6 +66,8 @@ An object of class \code{"sgdi"}, which is a list containing the following
 \item{\code{ci.lower}}{a vector of lower confidence limits}
 \item{\code{ci.upper}}{a vector of upper confidence limits}
 \item{\code{inference}}{character that specifies the inference method}
+\item{\code{level}}{The confidence level required. Default is 0.95.}
+\item{\code{path_coefficients}}{The path of coefficients.}
 }
 }
 \description{

@@ -50,6 +50,7 @@ If this option is TRUE, the first element of the parameter vector is the interce
 An object of class \code{"sgdi"}, which is a list containing the following
 \describe{
 \item{\code{coefficients}}{a vector of estimated parameter values}
+\item{\code{path_coefficients}}{The path of coefficients.}
 }
 }
 \description{
