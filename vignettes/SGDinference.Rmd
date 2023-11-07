@@ -95,7 +95,7 @@ print(res)
 ```
 To plot the SGD path, we first construct a SGD path for the return to education coefficients.
 ```{r}
-mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2, type="l")
+mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2)
 ```
 
 Then, we can plot the SGD path.
