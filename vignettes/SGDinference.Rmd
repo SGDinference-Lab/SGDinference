@@ -95,19 +95,19 @@ print(res)
 ```
 To plot the SGD path, we first construct a SGD path for the return to education coefficients.
 ```{r}
-mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2)
+mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2, type="l")
 ```
 
 Then, we can plot the SGD path.
 
 ```{r}
-plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps")
+plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps", type="l")
 ```
 
 To observe the initial paths, we now truncate the paths up to 2,000.
 
 ```{r}
-plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps")
+plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps", type="l")
 print(c("2000th step", mincer_sgd_path$path_coefficients[2000]))
 print(c("Final Estimate", mincer_sgd_path$coefficients[2]))
 ```
@@ -142,7 +142,7 @@ We now consider alternative quantile levels.
 As before, we can plot the SGD path. 
 ```{r}
 mincer_sgd_path = sgdi_qr(y ~ edu + exp + exp2, path = TRUE, path_index = 2)
-plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps")
+plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps", type="l")
 print(c("2000th step", mincer_sgd_path$path_coefficients[2000]))
 print(c("Final Estimate", mincer_sgd_path$coefficients[2]))
 ```
