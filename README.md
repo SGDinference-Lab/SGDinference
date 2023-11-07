@@ -162,7 +162,7 @@ mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2)
 Then, we can plot the SGD path.
 
 ``` r
-plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps", type="l")
+plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps")
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
@@ -170,7 +170,7 @@ plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps"
 To observe the initial paths, we now truncate the paths up to 2,000.
 
 ``` r
-plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps", type="l")
+plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps")
 ```
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
