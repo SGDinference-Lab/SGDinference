@@ -1,6 +1,6 @@
 ---
 title: "SGDinference: An R Vignette"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SGDinference: An R Vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,6 +33,7 @@ We begin by calling the SGDinference package.
 
 ```{r setup}
 library(SGDinference)
+set.seed(100723)
 ```
 
 ## Case Study: Estimating the Mincer Equation

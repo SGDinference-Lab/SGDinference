@@ -46,6 +46,7 @@ We begin by calling the SGDinference package.
 
 ```{r setup}
 library(SGDinference)
+set.seed(100723)
 ```
 
 

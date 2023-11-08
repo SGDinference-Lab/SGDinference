@@ -48,6 +48,7 @@ We begin by calling the SGDinference package.
 
 ``` r
 library(SGDinference)
+set.seed(100723)
 ```
 
 ## Case Study: Estimating the Mincer Equation
@@ -105,10 +106,10 @@ We now estimate the same model using SGD.
 #> 
 #> Coefficients: 
 #>             Coefficient    CI.Lower    CI.Upper
-#> (Intercept)  0.58692678  0.51821551  0.65563805
-#> edu          0.12652414  0.12289664  0.13015163
-#> exp          0.03153344  0.02785877  0.03520811
-#> exp2        -0.04603275 -0.05576062 -0.03630488
+#> (Intercept)  0.58714627  0.51899447  0.65529806
+#> edu          0.12651235  0.12290359  0.13012112
+#> exp          0.03152331  0.02788511  0.03516150
+#> exp2        -0.04601193 -0.05566846 -0.03635539
 #> 
 #> Significance Level: 95 %
 ```
@@ -125,10 +126,10 @@ but not confidence intervals.
 #> 
 #> Coefficients: 
 #>             Coefficient
-#> (Intercept)  0.58400539
-#> edu          0.12674866
-#> exp          0.03151793
-#> exp2        -0.04593379
+#> (Intercept)  0.58621823
+#> edu          0.12658176
+#> exp          0.03152287
+#> exp2        -0.04599148
 ```
 
 We compare the execution times between two versions and find that there
@@ -145,11 +146,11 @@ res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
 print(res)
 #> Unit: milliseconds
 #>                           expr      min       lq     mean   median       uq
-#>   sgd_lm(y ~ edu + exp + exp2) 3.425058 3.784853 4.319049 3.893012 4.167773
-#>  sgdi_lm(y ~ edu + exp + exp2) 4.163099 4.520229 5.106551 4.622975 4.875515
-#>        max neval
-#>   8.647433   100
-#>  11.408947   100
+#>   sgd_lm(y ~ edu + exp + exp2) 3.457161 3.790245 4.449522 3.963736 4.929922
+#>  sgdi_lm(y ~ edu + exp + exp2) 4.181631 4.531382 4.901665 4.629966 4.849870
+#>       max neval
+#>  8.986749   100
+#>  8.586507   100
 ```
 
 To plot the SGD path, we first construct a SGD path for the return to
@@ -162,7 +163,7 @@ mincer_sgd_path = sgdi_lm(y ~ edu + exp + exp2, path = TRUE, path_index = 2)
 Then, we can plot the SGD path.
 
 ``` r
-plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps")
+plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps", type="l") 
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
@@ -170,16 +171,16 @@ plot(mincer_sgd_path$path_coefficients, ylab="Return to Education", xlab="Steps"
 To observe the initial paths, we now truncate the paths up to 2,000.
 
 ``` r
-plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps")
+plot(mincer_sgd_path$path_coefficients[1:2000], ylab="Return to Education", xlab="Steps", type="l")
 ```
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 ``` r
 print(c("2000th step", mincer_sgd_path$path_coefficients[2000]))
-#> [1] "2000th step"       "0.123913138474636"
+#> [1] "2000th step"       "0.121832196962998"
 print(c("Final Estimate", mincer_sgd_path$coefficients[2]))
-#> [1] "Final Estimate"    "0.126641059670094"
+#> [1] "Final Estimate"    "0.126481851251926"
 ```
 
 It can be seen that the SGD path almost converged only after the 2,000
