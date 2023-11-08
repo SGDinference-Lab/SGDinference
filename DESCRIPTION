@@ -1,20 +1,20 @@
 Package: SGDinference
 Type: Package
-Title: Inference with Stochastic (sub-)Gradient Descent
+Title: Inference with Stochastic Gradient Descent
 Version: 0.1.0
 Authors@R: c(
     person("Sokbae", "Lee", email = "sl3841@columbia.edu", role = "aut"),
     person("Yuan", "Liao", email = "yuan.liao@rutgers.edu", role = "aut"),
     person("Myung Hwan", "Seo", email = "myunghseo@snu.ac.kr", role = "aut"),
     person("Youngki", "Shin", email = "shiny11@mcmaster.ca", role = c("aut", "cre")))
-Description: The package provides estimation and inference methods for large-scale mean and quantile regression models via stochastic (sub-)gradient descent (S-subGD) algorithms. 
+Description: Estimation and inference methods for large-scale mean and quantile regression models via stochastic (sub-)gradient descent (S-subGD) algorithms. 
     The inference procedure handles cross-sectional data sequentially: 
     (i) updating the parameter estimate with each incoming "new observation", 
     (ii) aggregating it as a Polyak-Ruppert average, and 
     (iii) computing an asymptotically pivotal statistic for inference through random scaling. 
     The methodology used in the SGDinference package is described in detail in the following papers: 
-    (i) Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2022. Fast and robust online inference with stochastic gradient descent via random scaling. In Proceedings of the AAAI Conference on Artificial Intelligence (Vol. 36, No. 7, pp. 7381-7389). <https://doi.org/10.1609/aaai.v36i7.20701>. 
-    (ii) Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2023. Fast Inference for Quantile Regression with Tens of Millions of Observations. arXiv:2209.14502 [econ.EM] <https://doi.org/10.48550/arXiv.2209.14502>.
+    (i) Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2022. Fast and robust online inference with stochastic gradient descent via random scaling. In Proceedings of the AAAI Conference on Artificial Intelligence (Vol. 36, No. 7, pp. 7381-7389). <doi:10.1609/aaai.v36i7.20701>. 
+    (ii) Lee, S., Liao, Y., Seo, M.H. and Shin, Y., 2023. Fast Inference for Quantile Regression with Tens of Millions of Observations. <arXiv:2209.14502>. <doi:10.48550/arXiv.2209.14502>.
 License: GPL-3
 Imports: 
     stats,

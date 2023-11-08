@@ -1,6 +1,6 @@
 ---
 title: "SGDinference: An R Vignette"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SGDinference: An R Vignette}
   %\VignetteEngine{knitr::rmarkdown}
