@@ -1,4 +1,5 @@
 test_that("sgd_qr studentize matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -12,6 +13,7 @@ test_that("sgd_qr studentize matters", {
 })
 
 test_that("sgd_qr no_studentize matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -25,6 +27,7 @@ test_that("sgd_qr no_studentize matters", {
 })
 
 test_that("sgd_qr intercept matters 1", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -38,6 +41,7 @@ test_that("sgd_qr intercept matters 1", {
 })
 
 test_that("sgd_qr intercept matters 2", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -51,6 +55,7 @@ test_that("sgd_qr intercept matters 2", {
 })
 
 test_that("sgd_qr bt_start matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -64,6 +69,7 @@ test_that("sgd_qr bt_start matters", {
 })
 
 test_that("sgd_qr burn matters 1", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -77,6 +83,7 @@ test_that("sgd_qr burn matters 1", {
 })
 
 test_that("sgd_qr burn matters 2", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -90,6 +97,7 @@ test_that("sgd_qr burn matters 2", {
 })
 
 test_that("sgd_qr with scalar X", {
+  skip_on_cran()
   n = 1e05
   p = 2
   bt0 = rep(5,2)
@@ -103,6 +111,7 @@ test_that("sgd_qr with scalar X", {
 })
 
 test_that("sgd_qr with scalar X with/out intercept", {
+  skip_on_cran()
   n = 1e05
   p = 2
   bt0 = c(0,5)

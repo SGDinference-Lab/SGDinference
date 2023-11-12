@@ -1,4 +1,5 @@
 test_that("expect no error using sgdi_lm", {
+  skip_on_cran()
   y = Census2000$ln_hrwage 
   edu = Census2000$edyrs
   exp = Census2000$exp
@@ -9,6 +10,7 @@ test_that("expect no error using sgdi_lm", {
 })
 
 test_that("expect difference between the 10th and 90th quantile regression estimates", {
+  skip_on_cran()
   y = Census2000$ln_hrwage 
   edu = Census2000$edyrs
   exp = Census2000$exp

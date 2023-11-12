@@ -2,6 +2,7 @@
 ### Quantile Regression ###
 ###########################
 test_that("sgdi_qr should work with option rs", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -12,6 +13,7 @@ test_that("sgdi_qr should work with option rs", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_qr should work with option rss", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -22,6 +24,7 @@ test_that("sgdi_qr should work with option rss", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_qr should work with option rsd", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -32,6 +35,7 @@ test_that("sgdi_qr should work with option rsd", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_qr option burn matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -44,6 +48,7 @@ test_that("sgdi_qr option burn matters", {
   expect_false(check==0)
 })
 test_that("sgdi_qr option intercept matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -56,6 +61,7 @@ test_that("sgdi_qr option intercept matters", {
   expect_false(check==0)
 })
 test_that("sgdi_qr option level matters 1", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -68,6 +74,7 @@ test_that("sgdi_qr option level matters 1", {
   expect_false(check==0)
 })
 test_that("sgdi_qr option level matters 2", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -80,6 +87,7 @@ test_that("sgdi_qr option level matters 2", {
   expect_false(check==0)
 })
 test_that("sgdi_qr option level matters 3", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -97,6 +105,7 @@ test_that("sgdi_qr option level matters 3", {
 #############################################
 ## NB: Without inference, we do not choose any option on V.hat estimation.
 test_that("sgd_qr should work", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -107,6 +116,7 @@ test_that("sgd_qr should work", {
   expect_error(print(out), NA)
 })
 test_that("sgd_qr option burn matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -119,6 +129,7 @@ test_that("sgd_qr option burn matters", {
   expect_false(check==0)
 })
 test_that("sgd_qr option intercept matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -134,6 +145,7 @@ test_that("sgd_qr option intercept matters", {
 ### Mean Regression ###
 #######################
 test_that("sgdi_lm should work with option rs", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -144,6 +156,7 @@ test_that("sgdi_lm should work with option rs", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_lm should work with option rss", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -154,6 +167,7 @@ test_that("sgdi_lm should work with option rss", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_lm should work with option rsd", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -164,6 +178,7 @@ test_that("sgdi_lm should work with option rsd", {
   expect_error(print(out), NA)
 })
 test_that("sgdi_lm: bt_start matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -177,6 +192,7 @@ test_that("sgdi_lm: bt_start matters", {
 })
 
 test_that("sgdi_lm option burn matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -189,6 +205,7 @@ test_that("sgdi_lm option burn matters", {
   expect_false(check==0)
 })
 test_that("sgdi_lm option intercept matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -201,6 +218,7 @@ test_that("sgdi_lm option intercept matters", {
   expect_false(check==0)
 })
 test_that("sgdi_lm option level matters 1", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -213,6 +231,7 @@ test_that("sgdi_lm option level matters 1", {
   expect_false(check==0)
 })
 test_that("sgdi_lm option level matters 2", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -225,6 +244,7 @@ test_that("sgdi_lm option level matters 2", {
   expect_false(check==0)
 })
 test_that("sgdi_lm option level matters 3", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -241,6 +261,7 @@ test_that("sgdi_lm option level matters 3", {
 ### Mean Regression without inference ###
 #########################################
 test_that("sgd_lm should work", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
@@ -251,6 +272,7 @@ test_that("sgd_lm should work", {
   expect_error(print(out), NA)
 })
 test_that("sgd_lm option burn matters", {
+  skip_on_cran()
   n = 1e05
   p = 5
   bt0 = rep(5,p)
