@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SGDinference-Lab/SGDinference/workflows/R-CMD-check/badge.svg)](https://github.com/SGDinference-Lab/SGDinference/actions)
-[![codecov](https://codecov.io/gh/SGDinference-Lab/SGDinference/branch/master/graph/badge.svg?token=YTBY15IXEP)](https://codecov.io/gh/SGDinference-Lab/SGDinference)
+[![codecov](https://codecov.io/gh/SGDinference-Lab/SGDinference/branch/master/graph/badge.svg?token=YTBY15IXEP)](https://app.codecov.io/gh/SGDinference-Lab/SGDinference)
 <!-- badges: end -->
 
 **SGDinference** is an R package that provides estimation and inference
@@ -141,16 +141,14 @@ library(microbenchmark)
 res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
                       sgdi_lm(y ~ edu + exp + exp2),
                       times=100L)
-#> Warning in microbenchmark(sgd_lm(y ~ edu + exp + exp2), sgdi_lm(y ~ edu + :
-#> less accurate nanosecond times to avoid potential integer overflows
 print(res)
 #> Unit: milliseconds
-#>                           expr      min       lq     mean   median       uq
-#>   sgd_lm(y ~ edu + exp + exp2) 3.457161 3.790245 4.449522 3.963736 4.929922
-#>  sgdi_lm(y ~ edu + exp + exp2) 4.181631 4.531382 4.901665 4.629966 4.849870
+#>                           expr      min       lq      mean   median        uq
+#>   sgd_lm(y ~ edu + exp + exp2) 7.652263 7.889744  8.849154 7.997736  9.477511
+#>  sgdi_lm(y ~ edu + exp + exp2) 9.644460 9.853086 10.629561 9.964209 10.200673
 #>       max neval
-#>  8.986749   100
-#>  8.586507   100
+#>  15.10680   100
+#>  15.06495   100
 ```
 
 To plot the SGD path, we first construct a SGD path for the return to
