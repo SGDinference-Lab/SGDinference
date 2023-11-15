@@ -1,5 +1,5 @@
 ---
-title: "SGDinference: An R Vignette"
+title: 'SGDinference: An R Vignette'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SGDinference: An R Vignette}
