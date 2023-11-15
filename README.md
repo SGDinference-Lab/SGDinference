@@ -144,11 +144,19 @@ res <- microbenchmark(sgd_lm(y ~ edu + exp + exp2),
 print(res)
 #> Unit: milliseconds
 #>                           expr      min       lq      mean    median        uq
+<<<<<<< HEAD
 #>   sgd_lm(y ~ edu + exp + exp2) 7.648906 7.876724  8.942916  8.111774  9.643112
 #>  sgdi_lm(y ~ edu + exp + exp2) 9.598323 9.896206 10.751566 10.133783 10.517422
 #>       max neval
 #>  14.88408   100
 #>  15.39211   100
+=======
+#>   sgd_lm(y ~ edu + exp + exp2) 7.612649 7.783084  8.795013  7.939131  9.419628
+#>  sgdi_lm(y ~ edu + exp + exp2) 9.605035 9.805727 10.646169 10.028305 10.539734
+#>       max neval
+#>  15.17188   100
+#>  14.60316   100
+>>>>>>> CRAN_Submision
 ```
 
 To plot the SGD path, we first construct a SGD path for the return to
