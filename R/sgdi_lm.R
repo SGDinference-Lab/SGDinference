@@ -77,7 +77,7 @@ sgdi_lm = function(formula,
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
     if (no_studentize > length(y)) {
-      cat("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
+      warning("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
       no_studentize = length(y)
     }
     x_mean = apply(x[1:no_studentize, , drop=F], 2, mean)
@@ -183,8 +183,8 @@ sgdi_lm = function(formula,
     critical.value = 3.875       # From Abadir and Paruolo (1997) Table 1. 90.0%  
   } else {
     critical.value = 6.747
-    cat("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
-    cat("We report the default level 0.95. \n")
+    warning("Confidence level should be chosen from 0.95, 0.90, and 0.80. \n")
+    warning("We report the default level 0.95. \n")
   }
   
   if (inference == "rs"){

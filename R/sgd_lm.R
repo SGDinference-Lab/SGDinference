@@ -60,7 +60,7 @@ sgd_lm = function(formula,
   if (studentize){
     # Compute column means and standard errors and save them for later reconversion
     if (no_studentize > length(y)) {
-      cat("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
+      warning("Warning: no_studentize is bigger than the sample size. no_studentize is set to be the sample size. \n")
       no_studentize = length(y)
     }
     x_mean = apply(x[1:no_studentize, , drop=F], 2, mean)
